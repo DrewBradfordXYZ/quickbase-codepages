@@ -2,6 +2,10 @@
 
 Update QuickBase code pages from the command line.
 
+## Install
+
+`npm install quickbase-codepages --save-dev`
+
 ## Environment Variables
 
 This project requires certain environment variables to be set in a `.env` file. Below is a list of the variables and their descriptions:

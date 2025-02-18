@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import puppeteer, { Page } from "puppeteer";
 import * as fs from "fs";
 import * as path from "path";
