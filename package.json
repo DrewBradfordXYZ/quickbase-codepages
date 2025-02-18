@@ -1,10 +1,10 @@
 {
   "name": "quickbase-codepages",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "Update QuickBase code pages from the command line.",
   "main": "dist/index.js",
   "bin": {
-    "quickbase-codepages": "./dist/index.js"
+    "codepages": "./dist/index.js"
   },
   "scripts": {
     "build": "tsc",
