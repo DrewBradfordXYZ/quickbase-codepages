@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.0.4](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.0.3...v1.0.4) (2025-02-18)
 
+Add a console log to see if the script is running
+
 ### [1.0.3](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.0.2...v1.0.3) (2025-02-18)
 
 npm pkg fix was run
