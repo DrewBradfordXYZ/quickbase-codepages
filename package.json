@@ -1,0 +1,26 @@
+{
+  "name": "quickbase-codepages",
+  "version": "1.0.1",
+  "description": "Update QuickBase code pages from the command line.",
+  "main": "dist/index.js",
+  "bin": {
+    "quickbase-codepages": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "release": "standard-version"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "dotenv": "^10.0.0",
+    "puppeteer": "^22.8.2"
+  },
+  "devDependencies": {
+    "typescript": "^4.0.0",
+    "@types/node": "^22.13.4",
+    "@types/puppeteer": "^5.4.7",
+    "standard-version": "^9.3.2"
+  },
+  "author": "Drew Bradford",
+  "license": "MIT"
+}
