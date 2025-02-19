@@ -11,7 +11,6 @@
     "build": "tsc",
     "postbuild": "node postbuild.js",
     "postinstall": "node postinstall.js",
-    "preuninstall": "echo 'Running preuninstall script...'",
     "release": "standard-version"
   },
   "dependencies": {

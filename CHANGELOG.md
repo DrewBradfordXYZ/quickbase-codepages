@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.1.7](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.1.6...v1.1.7) (2025-02-19)
 
+Check if preuninstall is running at all, removing the script.
+
 ### [1.1.6](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.1.5...v1.1.6) (2025-02-19)
 
 if initCwd is not set, throw an error.
