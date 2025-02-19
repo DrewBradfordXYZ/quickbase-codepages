@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.16](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.1.15...v1.1.16) (2025-02-19)
+
 ### [1.1.15](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.1.14...v1.1.15) (2025-02-19)
+
+Don't append script if && createHtmlCodePage is already there.
 
 ### [1.1.14](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.1.13...v1.1.14) (2025-02-19)
 
