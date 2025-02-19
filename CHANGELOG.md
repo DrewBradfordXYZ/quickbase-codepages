@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.1.9](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.1.8...v1.1.9) (2025-02-19)
 
+Wait for login page inputs to load before entering information
+
 ### [1.1.8](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.1.7...v1.1.8) (2025-02-19)
 
 Turns out npm does not allow for cleanup scripts to run on uninstall

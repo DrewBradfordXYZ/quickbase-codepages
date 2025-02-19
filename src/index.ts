@@ -18,7 +18,7 @@ const getAllFiles = (
   extension: string,
   directory: string = "assets"
 ): string[] => {
-  const assetsDir = path.resolve(__dirname, `../dist/${directory}`);
+  const assetsDir = path.resolve(process.cwd(), `./dist/${directory}`);
   let files: string[];
   try {
     files = fs.readdirSync(assetsDir);
@@ -36,8 +36,16 @@ const getAllFiles = (
   return filteredFiles.map((file) => path.join(assetsDir, file));
 };
 
-const takeScreenshot = async (page: Page, filename: string): Promise<void> => {
-  const screenshotPath = path.join(__dirname, filename);
+const generateScreenshotPath = (filename: string): string => {
+  const libraryRoot = path.resolve(__dirname, ".."); // Go up one level from dist
+  return path.join(libraryRoot, "screenshots-puppeteer", filename);
+};
+
+const captureScreenshot = async (
+  page: Page,
+  filename: string
+): Promise<void> => {
+  const screenshotPath = generateScreenshotPath(filename);
   try {
     await page.screenshot({ path: screenshotPath });
     console.log(`Screenshot saved to ${screenshotPath}`);
@@ -99,6 +107,7 @@ const updateCodePages = async () => {
           console.log(chalk.blue(`Login attempt ${loginAttempt}`));
         }
         await page.goto(quickbaseUrl, { timeout: 60000 });
+        await page.waitForSelector("input[name='loginid']", { timeout: 60000 });
         await page.type("input[name='loginid']", username);
         await page.type("input[name='password']", password);
         await page.click("#signin");
@@ -187,10 +196,14 @@ const updateCodePages = async () => {
 
       // Update the code page content
       await page.evaluate((codeContent) => {
-        const codeEditor = document.querySelector(
-          "#codeEditor"
+        const pageText = document.querySelector(
+          "#pagetext"
         ) as HTMLTextAreaElement;
-        codeEditor.value = codeContent;
+        if (pageText) {
+          pageText.value = codeContent;
+        } else {
+          throw new Error("Code editor element not found");
+        }
       }, codeContent);
 
       // Save the changes
@@ -235,9 +248,7 @@ const updateCodePages = async () => {
     }
 
     // Delete the screenshot file after successful execution
-    const screenshotPath = path.join(
-      __dirname,
-      "screenshots-puppeteer",
+    const screenshotPath = generateScreenshotPath(
       "error_codepage_screenshot.png"
     );
     if (fs.existsSync(screenshotPath)) {
@@ -250,10 +261,7 @@ const updateCodePages = async () => {
     console.error("Something went wrong, check the screenshot", error);
     try {
       // Take a screenshot for debugging
-      await takeScreenshot(
-        page,
-        "./screenshots-puppeteer/error_codepage_screenshot.png"
-      );
+      await captureScreenshot(page, "error_codepage_screenshot.png");
     } catch (screenshotError) {
       console.error("Error capturing screenshot:", screenshotError);
     }
@@ -262,4 +270,10 @@ const updateCodePages = async () => {
   }
 };
 
+// Export the function for external use
 export { updateCodePages };
+
+// If the script is run directly, call the function
+if (import.meta.url === `file://${__filename}`) {
+  updateCodePages();
+}
