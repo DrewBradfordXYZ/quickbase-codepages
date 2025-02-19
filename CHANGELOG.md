@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.9](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.1.8...v1.1.9) (2025-02-19)
+
 ### [1.1.8](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.1.7...v1.1.8) (2025-02-19)
+
+Turns out npm does not allow for cleanup scripts to run on uninstall
 
 ### [1.1.7](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.1.6...v1.1.7) (2025-02-19)
 
