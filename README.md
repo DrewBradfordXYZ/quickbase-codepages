@@ -1,6 +1,13 @@
 # quickbase-codepages
 
-Update QuickBase code pages from the command line.
+## Description
+
+Automate updating your QuickBase code pages with the files in your Node.js /dist folder from the command line.
+
+## Prerequisites
+
+- Node.js version 14.x or higher
+- A QuickBase account. A free (builder account)[https://www.quickbase.com/builder-program] will work.
 
 ## Install
 
