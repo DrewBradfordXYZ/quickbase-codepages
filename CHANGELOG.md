@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.13](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.1.12...v1.1.13) (2025-02-19)
+
 ### [1.1.12](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.1.11...v1.1.12) (2025-02-19)
+
+Forgot to save package.json
 
 ### [1.1.11](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.1.10...v1.1.11) (2025-02-19)
 
