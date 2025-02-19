@@ -4,7 +4,7 @@
 
 Automatically update your QuickBase code pages with the files in your node project's /dist folder from the command line.
 
-This allows you to deploy and test your project in QuickBase with ease. Removing the hassle of manually copy and pasting code into your code pages.
+This allows you to deploy and test your project in QuickBase with ease. Removing the hassle of manually copy and pasting code into code pages.
 
 This project uses Puppeteer to automate this process.
 
@@ -15,11 +15,15 @@ This project uses Puppeteer to automate this process.
 
 ## Install
 
-`npm install quickbase-codepages --save-dev`
+```bash
+npm install quickbase-codepages --save-dev
+```
 
 ## Use
 
-`npm run codepages`
+```bash
+npm run codepages
+```
 
 ## Environment Variables
 
@@ -76,6 +80,11 @@ QUICKBASE_CODEPAGE_JS_IDS=
 QUICKBASE_CODEPAGE_CSS_IDS=
 ```
 
+## Uninstall
+
+```bash
+npm uninstall quickbase-codepages --save-dev
 ```
 
-```
+- Open `package.json`
+- Remove `"codepages": "codepages"` in the `"scripts"` section.
