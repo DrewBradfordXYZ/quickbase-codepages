@@ -9,7 +9,7 @@ This allows you to deploy and test your project in QuickBase with ease. Removing
 ## Prerequisites
 
 - Node.js version 14.x or higher
-- A QuickBase account. A free (builder account)[https://www.quickbase.com/builder-program] will work.
+- A QuickBase account. A free [builder account](https://www.quickbase.com/builder-program) will work.
 
 ## Install
 
