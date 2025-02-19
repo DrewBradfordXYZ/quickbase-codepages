@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.1.11](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.1.10...v1.1.11) (2025-02-19)
 
+Update htmlGen permissions in postbuild.js
+
 ### [1.1.10](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.1.9...v1.1.10) (2025-02-19)
 
 Try to add htmlgen
