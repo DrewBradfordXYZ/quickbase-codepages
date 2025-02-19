@@ -25,7 +25,7 @@ npm install quickbase-codepages --save-dev
 npm run codepages
 ```
 
-## Environment Variables
+## Required: Environment Variables
 
 This project requires certain environment variables to be set in a `.env` file for `npm run codepages` to update code pages.
 
