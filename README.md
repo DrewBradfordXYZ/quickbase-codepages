@@ -80,7 +80,7 @@ QUICKBASE_CODEPAGE_JS_IDS=
 QUICKBASE_CODEPAGE_CSS_IDS=
 ```
 
-## Uninstall
+### Uninstall
 
 ```bash
 npm uninstall quickbase-codepages --save-dev
