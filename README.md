@@ -26,23 +26,19 @@ This project requires certain environment variables to be set in a `.env` file f
 - **`QUICKBASE_USERNAME`**:
 
   - Your QuickBase username.
-  - Used by Puppeteer to sign in to QuickBase.
 
 - **`QUICKBASE_PASSWORD`**:
 
   - Your QuickBase password.
-  - Used by Puppeteer to sign in to QuickBase.
 
 - **`QUICKBASE_LOGIN_URL`**:
 
   - The sign-in URL for QuickBase.
-  - Used by Puppeteer to sign in to QuickBase.
   - Example: `https://builderprogram-USERNAME.quickbase.com/db/main?a=SignIn`
 
 - **`QUICKBASE_CODEPAGE_EDIT_URL`**:
 
   - The URL to navigate to a code page in your app.
-  - Used by Puppeteer to navigate to the code page to update the code.
   - Example: `https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/pageedit?pageID=`
 
 - **`QUICKBASE_CODEPAGE_HTML_ID`**:
