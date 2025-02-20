@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.1](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.2.0...v1.2.1) (2025-02-20)
+
 ## [1.2.0](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.1.17...v1.2.0) (2025-02-19)
+
+Feat: Generate an html file built for QuickBase code pages and hide the index.html file that node generates in a ./dist/unused folder.
 
 ### [1.1.17](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.1.16...v1.1.17) (2025-02-19)
 
