@@ -19,7 +19,7 @@ This project uses Puppeteer to automate this process.
 npm install quickbase-codepages --save-dev
 ```
 
-### Uninstall
+## Uninstall
 
 ```bash
 npm uninstall quickbase-codepages --save-dev
