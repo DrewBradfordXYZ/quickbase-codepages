@@ -50,7 +50,7 @@ npm uninstall quickbase-codepages --save-dev
 
 ## Required: Environment Variables
 
-This project requires certain environment variables to be set in a `.env` file.
+This project requires these environment variables to be set in a `.env` file.
 
 #### .gitignore
 
