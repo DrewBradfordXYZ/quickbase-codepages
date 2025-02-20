@@ -7,7 +7,7 @@
   "bin": {
     "codepages": "./dist/codePagesUpdate.js",
     "createHtmlCodePage": "./dist/createHtmlCodePage.js",
-    "hideNodeHtml": "./dist/hideNodeHtml.js",
+    "hideDefaultHtml": "./dist/hideDefaultHtml.js",
     "uninstall-quickbase-codepages": "./dist/uninstall.js"
   },
   "scripts": {
