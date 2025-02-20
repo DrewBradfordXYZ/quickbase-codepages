@@ -8,6 +8,8 @@ This allows you to deploy and test your project in QuickBase with ease. Removing
 
 This project uses Puppeteer to automate this process.
 
+![Copy code page in the terminal](copyExample.png)
+
 ## Prerequisites
 
 - Node.js version 14.x or higher
