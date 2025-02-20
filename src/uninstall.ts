@@ -19,10 +19,10 @@ try {
     delete packageJson.scripts.codepages;
   }
 
-  // Remove createHtmlCodePage and hideDefaultHtml from the build script
+  // Remove createCodePageHtml and hideDefaultHtml from the build script
   if (packageJson.scripts && packageJson.scripts.build) {
     packageJson.scripts.build = packageJson.scripts.build
-      .replace("&& createHtmlCodePage", "")
+      .replace("&& createCodePageHtml", "")
       .replace("&& hideDefaultHtml", "")
       .trim();
   }

@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.2.10](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.2.9...v1.2.10) (2025-02-20)
 
+Rename createCodePageHtml
+
 ### [1.2.9](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.2.8...v1.2.9) (2025-02-20)
 
 try again, a file wasnt saved maybe

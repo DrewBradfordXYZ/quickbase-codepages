@@ -23,9 +23,9 @@ try {
   packageJson.scripts.codepages = "codepages";
 
   // Check if '&& htmlgen' is already present in the build script
-  if (!packageJson.scripts.build.includes("&& createHtmlCodePage")) {
-    // Append the createHtmlCodePage script to the existing build script
-    packageJson.scripts.build = `${packageJson.scripts.build} && createHtmlCodePage`;
+  if (!packageJson.scripts.build.includes("&& createCodePageHtml")) {
+    // Append the createCodePageHtml script to the existing build script
+    packageJson.scripts.build = `${packageJson.scripts.build} && createCodePageHtml`;
   }
 
   // Check if '&& hideDefaultHtml' is already present in the build script

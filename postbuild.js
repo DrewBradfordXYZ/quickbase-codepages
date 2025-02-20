@@ -4,7 +4,7 @@ import { resolve } from "path";
 // This makees the generated files executable after running 'npm run build'
 
 const codePagesUpdatePath = resolve("dist/codePagesUpdate.js");
-const htmlGenPath = resolve("dist/createHtmlCodePage.js");
+const htmlGenPath = resolve("dist/createCodePageHtml.js");
 const hideDefaultHtmlPath = resolve("dist/hideDefaultHtml.js");
 const uninstallPath = resolve("dist/uninstall.js");
 
@@ -15,5 +15,5 @@ chmodSync(hideDefaultHtmlPath, "755");
 chmodSync(uninstallPath, "755");
 
 console.log(
-  "Permissions set for codePagesUpdate.js, createHtmlCodePage.js, hideDefaultHtml.js and uninstall.js"
+  "Permissions set for codePagesUpdate.js, createCodePageHtml.js, hideDefaultHtml.js and uninstall.js"
 );
