@@ -34,19 +34,19 @@ npm uninstall quickbase-codepages --save-dev
 
 ## Use
 
+`npm run codepages`
+
+- Auto update code page content with production files in your projects `./dist` folder.
+- Terminal messages display the matching behavior of code-page-name-id -> filename
+- To change the matching behavior, reorder the code page ID variable lists in `.env`. NOTE: the order starts top down in `./dist` by file type.
+- If you wish to not update your HTML code page, set `QUICKBASE_CODEPAGE_HTML_ID=` in `.env`.
+
 `npm run build` is extended with additional features:
 
 - Auto create a QuickBase HTML code page `rootproject.html` in `./dist` with prebuilt CSS and JS links to code page URLs.
   - To turn off this behavior remove `&& createHtmlCodePage` from the `"build"` script in `package.json`
 - The default `index.html` is no longer needed and is moved into `./dist/unused/`, and ignored.
   - To turn off this behavior remove `&& hideNodeHtml` from the `"build"` script in `package.json`.
-
-`npm run codepages`
-
-- Auto update code page content with files in `./dist`.
-- Terminal messages display the matching behavior of code-page-name-id -> filename
-- To change the matching behavior, reorder the code page ID variable lists in `.env`. NOTE: the order starts top down in `./dist` by file type.
-- If you wish to not update your HTML code page, set `QUICKBASE_CODEPAGE_HTML_ID=` in `.env`.
 
 ## Required: Environment Variables
 
