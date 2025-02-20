@@ -45,7 +45,7 @@ npm uninstall quickbase-codepages --save-dev
 
 is extended with additional features to set up a QuickBase ready HTML file and project structure:
 
-- Auto creates a QuickBase HTML code page `yourprojectname.html` in your projects `./dist` folder with prebuilt CSS and JS links to code page URLs.
+- Auto creates a code page ready HTML file `yourprojectname.html` in your projects `./dist` folder with prebuilt CSS and JS links to your code page URLs.
   - To turn off this behavior remove `&& createHtmlCodePage` from the `"build"` script in `package.json`
 - The default `index.html` is no longer needed and is moved into `./dist/unused/`, and ignored.
   - To turn off this behavior remove `&& hideNodeHtml` from the `"build"` script in `package.json`.
