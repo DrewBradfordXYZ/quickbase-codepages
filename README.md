@@ -50,6 +50,15 @@ npm uninstall quickbase-codepages --save-dev
 
 This project requires certain environment variables to be set in a `.env` file for `npm run codepages` to update code pages.
 
+### .gitignore
+
+> **Note:** Make sure to add `.env` to your `.gitignore` file to avoid exposing sensitive information.
+
+```gitignore
+# Environment variables
+.env
+```
+
 - **`QUICKBASE_USERNAME`**:
 
   - Your QuickBase username.
