@@ -24,13 +24,13 @@ npm install quickbase-codepages --save-dev
 ## Uninstall
 
 ```bash
-npm uninstall quickbase-codepages --save-dev
+npx uninstall-quickbase-codepages
 ```
 
-- Open `package.json`
+However, if you have already run `npm uninstall quickbase-codepages --save-dev` you will have to manually remove parts of `package.json`.
+
 - Remove `"codepages": "codepages"` from the `"scripts"` section.
-- Remove `&& createHtmlCodePage` from the `"scripts"` `"build"` item.
-- Remove `&& hideNodeHtml` from the `"scripts"` `"build"` item.
+- Remove `&& createHtmlCodePage` and `&& hideNodeHtml` from `"build"` in the `"scripts"` section.
 
 ## Use
 

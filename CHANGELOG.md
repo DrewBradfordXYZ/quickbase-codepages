@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.2.7](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.2.6...v1.2.7) (2025-02-20)
 
+Set permissions for uninstall script
+
 ### [1.2.6](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.2.5...v1.2.6) (2025-02-20)
 
 Add an uninstall script
