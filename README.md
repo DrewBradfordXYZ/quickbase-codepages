@@ -24,7 +24,7 @@ npm install quickbase-codepages --save-dev
 ## Uninstall
 
 ```bash
-# This uninstalls the whole project
+# This uninstalls the entire library
 npx uninstall-quickbase-codepages
 ```
 
