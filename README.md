@@ -43,7 +43,7 @@ npm uninstall quickbase-codepages --save-dev
 
 `npm run build`
 
-Extended with additional features to set up a QuickBase ready HTML file and project structure:
+is extended with additional features to set up a QuickBase ready HTML file and project structure:
 
 - Auto creates a QuickBase HTML code page `yourprojectname.html` in your projects `./dist` folder with prebuilt CSS and JS links to code page URLs.
   - To turn off this behavior remove `&& createHtmlCodePage` from the `"build"` script in `package.json`
