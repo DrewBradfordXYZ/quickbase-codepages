@@ -19,6 +19,17 @@ This project uses Puppeteer to automate this process.
 npm install quickbase-codepages --save-dev
 ```
 
+### Uninstall
+
+```bash
+npm uninstall quickbase-codepages --save-dev
+```
+
+- Open `package.json`
+- Remove `"codepages": "codepages"` from the `"scripts"` section.
+- Remove `&& createHtmlCodePage` from the `"scripts"` `"build"` item.
+- Remove `&& hideNodeHtml` from the `"scripts"` `"build"` item.
+
 ## Use
 
 `npm run build` is extended with additional features:
@@ -105,13 +116,10 @@ QUICKBASE_CODEPAGE_JS_IDS=
 QUICKBASE_CODEPAGE_CSS_IDS=
 ```
 
-### Uninstall
+## Contributing
 
-```bash
-npm uninstall quickbase-codepages --save-dev
-```
+If you would like to contribute to this project, please fork the repository and submit a pull request.
 
-- Open `package.json`
-- Remove `"codepages": "codepages"` from the `"scripts"` section.
-- Remove `&& createHtmlCodePage` from the `"scripts"` `"build"` item.
-- Remove `&& hideNodeHtml` from the `"scripts"` `"build"` item.
+## License
+
+This project is licensed under the MIT License.
