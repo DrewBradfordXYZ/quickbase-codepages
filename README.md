@@ -69,7 +69,7 @@ This project requires certain environment variables to be set in a `.env` file.
 
 - **`QUICKBASE_LOGIN_URL`**:
 
-  - The sign-in URL for QuickBase.
+  - Logout to get the sign-in URL for QuickBase.
   - Example: `https://builderprogram-USERNAME.quickbase.com/db/main?a=SignIn`
 
 - **`QUICKBASE_CODEPAGE_EDIT_URL`**:
@@ -106,7 +106,9 @@ This project requires certain environment variables to be set in a `.env` file.
 
 ### Example `.env` File
 
-See `.env.example` in the project root you can copy.
+See `.env.example` in the project files. You may use it as a template. Rename `.env.example` to `.env` and place it in your root folder.
+
+> **Note:** Make sure to add `.env` to your `.gitignore` file to avoid exposing sensitive information.
 
 ```properties
 # QuickBase credentials.
