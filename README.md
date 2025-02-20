@@ -4,7 +4,7 @@
 
 Automatically update your QuickBase code pages with `./dist` files using `npm run codepages`.
 
-This allows you to deploy and test your project in QuickBase with ease. Removing the hassle of manually copy and pasting code into code pages.
+This allows you to deploy and test your project in QuickBase with ease. Removing the hassle of manually copy and pasting into code pages.
 
 This project uses Puppeteer to automate this process.
 
