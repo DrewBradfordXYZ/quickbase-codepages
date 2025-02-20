@@ -24,13 +24,14 @@ npm install quickbase-codepages --save-dev
 ## Uninstall
 
 ```bash
+# This uninstalls the whole project
 npx uninstall-quickbase-codepages
 ```
 
 However, if you have already run `npm uninstall quickbase-codepages --save-dev` you will have to manually remove parts of `package.json`.
 
 - Remove `"codepages": "codepages"` from the `"scripts"` section.
-- Remove `&& createHtmlCodePage` and `&& hideNodeHtml` from `"build"` in the `"scripts"` section.
+- Remove `&& createHtmlCodePage` and `&& hideDefaultHtml` from `"build"` in the `"scripts"` section.
 
 ## Use
 
@@ -47,8 +48,8 @@ is extended with additional features to set up a QuickBase ready HTML file and p
 
 - Auto creates a code page ready HTML file `yourprojectname.html` in your projects `./dist` folder with prebuilt CSS and JS links to your code page URLs.
   - To turn off this behavior remove `&& createHtmlCodePage` from the `"build"` script in `package.json`
-- The default `index.html` is no longer needed and is moved into `./dist/unused/`, and ignored.
-  - To turn off this behavior remove `&& hideNodeHtml` from the `"build"` script in `package.json`.
+- The default `index.html` is no longer needed and is moved into `./dist/unused/`. This folder is ignored by `npm run codepages` and will not be saved to a code page.
+  - To turn off this behavior remove `&& hideDefaultHtml` from the `"build"` script in `package.json`.
 
 ## Required: Environment Variables
 

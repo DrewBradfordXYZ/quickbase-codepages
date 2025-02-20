@@ -11,11 +11,11 @@ try {
     if (packageJson.scripts && packageJson.scripts.codepages) {
         delete packageJson.scripts.codepages;
     }
-    // Remove createHtmlCodePage and hideNodeHtml from the build script
+    // Remove createHtmlCodePage and hideDefaultHtml from the build script
     if (packageJson.scripts && packageJson.scripts.build) {
         packageJson.scripts.build = packageJson.scripts.build
             .replace("&& createHtmlCodePage", "")
-            .replace("&& hideNodeHtml", "")
+            .replace("&& hideDefaultHtml", "")
             .trim();
     }
     // Write the updated package.json back to the file

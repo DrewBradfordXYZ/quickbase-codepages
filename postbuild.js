@@ -5,15 +5,15 @@ import { resolve } from "path";
 
 const codePagesUpdatePath = resolve("dist/codePagesUpdate.js");
 const htmlGenPath = resolve("dist/createHtmlCodePage.js");
-const hideNodeHtmlPath = resolve("dist/hideNodeHtml.js");
+const hideDefaultHtmlPath = resolve("dist/hideDefaultHtml.js");
 const uninstallPath = resolve("dist/uninstall.js");
 
 // Ensure the files have the correct permissions
 chmodSync(codePagesUpdatePath, "755");
 chmodSync(htmlGenPath, "755");
-chmodSync(hideNodeHtmlPath, "755");
+chmodSync(hideDefaultHtmlPath, "755");
 chmodSync(uninstallPath, "755");
 
 console.log(
-  "Permissions set for codePagesUpdate.js, createHtmlCodePage.js, hideNodeHtml.js and uninstall.js"
+  "Permissions set for codePagesUpdate.js, createHtmlCodePage.js, hideDefaultHtml.js and uninstall.js"
 );

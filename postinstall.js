@@ -28,10 +28,10 @@ try {
     packageJson.scripts.build = `${packageJson.scripts.build} && createHtmlCodePage`;
   }
 
-  // Check if '&& hideNodeHtml' is already present in the build script
-  if (!packageJson.scripts.build.includes("&& hideNodeHtml")) {
-    // Append the hideNodeHtml script to the existing build script
-    packageJson.scripts.build = `${packageJson.scripts.build} && hideNodeHtml`;
+  // Check if '&& hideDefaultHtml' is already present in the build script
+  if (!packageJson.scripts.build.includes("&& hideDefaultHtml")) {
+    // Append the hideDefaultHtml script to the existing build script
+    packageJson.scripts.build = `${packageJson.scripts.build} && hideDefaultHtml`;
   }
 
   // Write the updated package.json back to the file
