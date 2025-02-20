@@ -23,7 +23,7 @@ npm install quickbase-codepages --save-dev
 
 `npm run build` is extended with additional features:
 
-- Auto create a QuickBase HTML code page `projectname.html` in `./dist` with prebuilt CSS and JS links to code page URLs.
+- Auto create a QuickBase HTML code page `rootproject.html` in `./dist` with prebuilt CSS and JS links to code page URLs.
   - To turn off this behavior remove `&& createHtmlCodePage` from the `"build"` script in `package.json`
 - The default `index.html` is no longer needed and is moved into `./dist/unused/`, and ignored.
   - To turn off this behavior remove `&& hideNodeHtml` from the `"build"` script in `package.json`.
