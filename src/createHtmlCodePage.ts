@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 function generateHtml() {
+  const htmlTitle = process.env.QUICKBASE_HTML_PAGE_TITLE || "QuickBase";
   const cssPageIds = process.env.QUICKBASE_CODEPAGE_CSS_IDS
     ? process.env.QUICKBASE_CODEPAGE_CSS_IDS.split(",")
     : ["<-QUICKBASE-CODEPAGE-CSS-IDS->"];
@@ -59,7 +60,7 @@ function generateHtml() {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QuickBase Copy</title>`;
+  <title>${htmlTitle}</title>`;
 
   if (commentsEnvRename) htmlContent += `\n${commentsEnvRename}`;
   if (commentsPageUrl) htmlContent += `\n${commentsPageUrl}`;

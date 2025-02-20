@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.2.3](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.2.2...v1.2.3) (2025-02-20)
 
+Fix variable typo
+
 ### [1.2.2](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.2.1...v1.2.2) (2025-02-20)
 
 Add HTML page title variable to .env

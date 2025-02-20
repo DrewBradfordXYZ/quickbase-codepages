@@ -63,6 +63,11 @@ This project requires certain environment variables to be set in a `.env` file f
   - `npm run build` quickbase-copy.html updates.
   - Example: `https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/AppDBPages`
 
+- **`QUICKBASE_HTML_PAGE_TITLE`**:
+
+  - The HTML page title for the generated HTML code page.
+  - Example: `Page Title`
+
 - **`QUICKBASE_CODEPAGE_HTML_ID`**:
 
   - The HTML code page ID.
@@ -92,6 +97,7 @@ QUICKBASE_CODEPAGE_EDIT_URL=
 QUICKBASE_CODEPAGES_URL=
 
 # QuickBase code page IDs.
+QUICKBASE_HTML_PAGE_TITLE=
 QUICKBASE_CODEPAGE_HTML_ID=
 QUICKBASE_CODEPAGE_JS_IDS=
 QUICKBASE_CODEPAGE_CSS_IDS=
