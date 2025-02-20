@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.2.1](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.2.0...v1.2.1) (2025-02-20)
 
+Update README
+
 ## [1.2.0](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.1.17...v1.2.0) (2025-02-19)
 
 Feat: Generate an html file built for QuickBase code pages and hide the index.html file that node generates in a ./dist/unused folder.

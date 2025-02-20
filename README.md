@@ -21,9 +21,19 @@ npm install quickbase-codepages --save-dev
 
 ## Use
 
-```bash
-npm run codepages
-```
+`npm run build` is extended with additional features:
+
+- Auto create a QuickBase HTML code page `projectname.html` in `./dist` with prebuilt CSS and JS links to code page URLs.
+  - To turn off this behavior remove `&& createHtmlCodePage` from the `"build"` script in `package.json`
+- The default `index.html` is no longer needed and is moved into `./dist/unused/`, and ignored.
+  - To turn off this behavior remove `&& hideNodeHtml` from the `"build"` script in `package.json`.
+
+`npm run codepages`
+
+- Auto update code page content with files in `./dist`.
+- Terminal messages display the matching behavior of code-page-name-id -> filename
+- To change the matching behavior, reorder the code page ID variable lists in `.env`. NOTE: the order starts top down in `./dist` by file type.
+- If you wish to not update your HTML code page, set `QUICKBASE_CODEPAGE_HTML_ID=` in `.env`.
 
 ## Required: Environment Variables
 
@@ -44,8 +54,14 @@ This project requires certain environment variables to be set in a `.env` file f
 
 - **`QUICKBASE_CODEPAGE_EDIT_URL`**:
 
-  - The URL to navigate to a code page in your app.
+  - The URL when you navigate to an individual code page in your app.
   - Example: `https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/pageedit?pageID=`
+
+- **`QUICKBASE_CODEPAGES_URL`**:
+
+  - Navigate to the Pages section in your app. This is the page that lists all your code pages.
+  - `npm run build` quickbase-copy.html updates.
+  - Example: `https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/AppDBPages`
 
 - **`QUICKBASE_CODEPAGE_HTML_ID`**:
 
@@ -73,6 +89,7 @@ QUICKBASE_PASSWORD=
 # QuickBase URLs.
 QUICKBASE_LOGIN_URL=
 QUICKBASE_CODEPAGE_EDIT_URL=
+QUICKBASE_CODEPAGES_URL=
 
 # QuickBase code page IDs.
 QUICKBASE_CODEPAGE_HTML_ID=
@@ -87,4 +104,6 @@ npm uninstall quickbase-codepages --save-dev
 ```
 
 - Open `package.json`
-- Remove `"codepages": "codepages"` in the `"scripts"` section.
+- Remove `"codepages": "codepages"` from the `"scripts"` section.
+- Remove `&& createHtmlCodePage` from the `"scripts"` `"build"` item.
+- Remove `&& hideNodeHtml` from the `"scripts"` `"build"` item.

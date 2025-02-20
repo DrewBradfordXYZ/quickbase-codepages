@@ -1,10 +1,8 @@
-// Purpose: Add the codepages script to the package.json file
-
 // Explanation: This script is run after the package is installed.
-// It reads the package.json file, adds the codepages script,
-// and writes the changes back to the file.
-// This script is useful when you want to add a script
-// to the package.json file that is not included by default.
+// It reads the package.json file, adding the necessary npm scripts.
+
+// These script names reference the 'bin' section in package.json,
+// which are the entry points for the CLI commands.
 
 import { readFileSync, writeFileSync } from "fs";
 import { resolve } from "path";
@@ -24,9 +22,21 @@ try {
   // Add the codepages script
   packageJson.scripts.codepages = "codepages";
 
+  // Check if '&& htmlgen' is already present in the build script
+  if (!packageJson.scripts.build.includes("&& createHtmlCodePage")) {
+    // Append the createHtmlCodePage script to the existing build script
+    packageJson.scripts.build = `${packageJson.scripts.build} && createHtmlCodePage`;
+  }
+
+  // Check if '&& hideNodeHtml' is already present in the build script
+  if (!packageJson.scripts.build.includes("&& hideNodeHtml")) {
+    // Append the hideNodeHtml script to the existing build script
+    packageJson.scripts.build = `${packageJson.scripts.build} && hideNodeHtml`;
+  }
+
   // Write the updated package.json back to the file
   writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
-  console.log("Successfully added 'codepages' script to package.json");
+  console.log("Successfully added scripts in package.json");
 } catch (error) {
-  console.error("Failed to add 'codepages' script to package.json:", error);
+  console.error("Failed to add scripts to package.json:", error);
 }
