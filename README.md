@@ -2,7 +2,7 @@
 
 ## Description
 
-Automatically update your QuickBase code pages with the files in your node project's /dist folder from the command line.
+Automatically update your QuickBase code pages with `./dist` files using `npm run codepages`.
 
 This allows you to deploy and test your project in QuickBase with ease. Removing the hassle of manually copy and pasting code into code pages.
 
