@@ -108,7 +108,7 @@ This project requires certain environment variables to be set in a `.env` file.
 
 ### Example `.env` File
 
-See `.env.example` in the project files. You may use it as a template. Rename `.env.example` to `.env` and place it in your root folder.
+See `.env.example` in the project files. You may use this as a template. Rename `.env.example` to `.env` and place it in your root folder.
 
 > **Note:** Make sure to add `.env` to your `.gitignore` file to avoid exposing sensitive information.
 
