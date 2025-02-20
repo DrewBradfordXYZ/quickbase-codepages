@@ -12,7 +12,7 @@ This project uses Puppeteer to automate this process.
 
 ## Prerequisites
 
-- Node.js version 14.x or higher
+- Node.js version 16.x or higher is recommended.
 - A QuickBase account. A free [builder account](https://www.quickbase.com/builder-program) will work.
 
 ## Install
