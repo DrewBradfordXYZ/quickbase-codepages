@@ -36,7 +36,7 @@ npm uninstall quickbase-codepages --save-dev
 
 `npm run codepages`
 
-- Auto update code page content with production files in your projects `./dist` folder.
+- Auto updates code page content with production files in your projects `./dist` folder.
 - Terminal messages display the matching behavior of code pages to production files so you can see what is being saved.
 - To change the matching behavior, reorder the code page ID variable lists in `.env`. NOTE: the order starts top down in `./dist` by file type.
 - If you wish to not update your HTML code page, set `QUICKBASE_CODEPAGE_HTML_ID=` in `.env`.
