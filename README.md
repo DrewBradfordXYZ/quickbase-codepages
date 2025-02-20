@@ -85,7 +85,7 @@ This project requires certain environment variables to be set in a `.env` file.
 
 - **`QUICKBASE_HTML_PAGE_TITLE`**:
 
-  - The HTML page title for the generated HTML code page.
+  - The HTML `<title></title>` for the generated HTML code page.
   - Example: `Page Title`
 
 - **`QUICKBASE_CODEPAGE_HTML_ID`**:
@@ -105,6 +105,8 @@ This project requires certain environment variables to be set in a `.env` file.
   - Example: `4,6`
 
 ### Example `.env` File
+
+See `.env.example` in the project root you can copy.
 
 ```properties
 # QuickBase credentials.
