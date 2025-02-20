@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.2.5](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.2.4...v1.2.5) (2025-02-20)
 
+Remove console log from codePagesUpdate.ts
+
 ### [1.2.4](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.2.3...v1.2.4) (2025-02-20)
 
 Update dependancies to latest versions

@@ -9,8 +9,6 @@ import chalk from "chalk";
 
 dotenv.config();
 
-console.log("QuickBase Code Pages Update Script");
-
 const __filename = fileURLToPath(import.meta.url); // this line is needed to get the absolute path of the current file in an ES6 module,
 const __dirname = path.dirname(__filename);
 
