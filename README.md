@@ -2,7 +2,7 @@
 
 ## Description
 
-Automatically update your QuickBase code pages with `./dist` files using `npm run codepages`. It also generates an HTML file with JS and CSS code page links using `npm run build`.
+Automatically update your QuickBase code pages with production files in your `./dist` folder using `npm run codepages`. It also generates an HTML file with JS and CSS code page links using `npm run build`.
 
 This allows you to deploy and test your project in QuickBase with ease. Removing the hassle of manually copy and pasting into code pages.
 
