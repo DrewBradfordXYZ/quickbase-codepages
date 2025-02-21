@@ -171,6 +171,18 @@ const updatePageContent = (pageId, codeContent, filePath, quickbasePagePath, pag
     yield page.waitForNavigation();
     console.log(chalk.bold.bgGreen(`Successfully Saved`));
 });
+// Function to get app identifiers from environment variables
+const getAppIdentifiers = () => {
+    const env = process.env;
+    const appIdentifierSet = new Set();
+    Object.keys(env).forEach((key) => {
+        const match = key.match(/^([^_]+)_QUICKBASE_.+$/);
+        if (match) {
+            appIdentifierSet.add(match[1]);
+        }
+    });
+    return appIdentifierSet;
+};
 const updateCodePages = () => __awaiter(void 0, void 0, void 0, function* () {
     // Get ./dist files with .js, .css, and .html extensions
     const jsFiles = getAllFiles(".js");
@@ -191,15 +203,9 @@ const updateCodePages = () => __awaiter(void 0, void 0, void 0, function* () {
         if (!loginSuccess) {
             return;
         }
-        // collect ${appName}_QUICKBASE_ environment variables
-        const env = process.env;
-        const appIdentifierSet = new Set();
-        Object.keys(env).forEach((key) => {
-            const match = key.match(/^([^_]+)_QUICKBASE_.+$/);
-            if (match) {
-                appIdentifierSet.add(match[1]);
-            }
-        });
+        // collect ${appName}_QUICKBASE_ prefix environment variables
+        const appIdentifierSet = getAppIdentifiers();
+        console.log("appIdentifierSet", appIdentifierSet);
         // Iterate over each appIdentifier and call updatePageContent
         for (const appIdentifier of appIdentifierSet) {
             // Process environment variables for each appIdentifier

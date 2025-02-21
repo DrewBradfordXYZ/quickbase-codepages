@@ -235,6 +235,19 @@ const updatePageContent = async (
   console.log(chalk.bold.bgGreen(`Successfully Saved`));
 };
 
+// Function to get app identifiers from environment variables
+const getAppIdentifiers = (): Set<string> => {
+  const env = process.env;
+  const appIdentifierSet = new Set<string>();
+  Object.keys(env).forEach((key) => {
+    const match = key.match(/^([^_]+)_QUICKBASE_.+$/);
+    if (match) {
+      appIdentifierSet.add(match[1]);
+    }
+  });
+  return appIdentifierSet;
+};
+
 const updateCodePages = async () => {
   // Get ./dist files with .js, .css, and .html extensions
   const jsFiles = getAllFiles(".js");
@@ -263,15 +276,8 @@ const updateCodePages = async () => {
       return;
     }
 
-    // collect ${appName}_QUICKBASE_ environment variables
-    const env = process.env;
-    const appIdentifierSet = new Set<string>();
-    Object.keys(env).forEach((key) => {
-      const match = key.match(/^([^_]+)_QUICKBASE_.+$/);
-      if (match) {
-        appIdentifierSet.add(match[1]);
-      }
-    });
+    //Ex: {'APP1', 'APP2', 'APP3'}
+    const appIdentifierSet = getAppIdentifiers();
 
     // Iterate over each appIdentifier and call updatePageContent
     for (const appIdentifier of appIdentifierSet) {
