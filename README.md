@@ -2,7 +2,7 @@
 
 ## Description
 
-Automatically update your QuickBase code pages in multiple apps with production files in your `./dist` folder using `npm run codepages`. Running `npm run build` generates a QuickBase ready project structure with HTML files for each app that have preassigned links to your code pages.
+Hands free updating of your QuickBase code pages for multiple apps by running `npm run codepages`. Running `npm run build` creates QuickBase ready HTML files for each app containing pre-generated links to your code pages.
 
 This allows you to deploy and test your project in QuickBase with ease. Removing the hassle of manually copy and pasting into code pages.
 
