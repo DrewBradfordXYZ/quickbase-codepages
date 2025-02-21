@@ -51,7 +51,7 @@ is extended with additional features to set up a QuickBase ready HTML file and p
 
 ## Required: Environment Variables
 
-This project requires these environment variables to be set in a `.env` file.
+This project requires environment variables to be set in your `.env` file.
 
 #### .gitignore
 
@@ -75,34 +75,35 @@ This project requires these environment variables to be set in a `.env` file.
   - Logout to get the sign-in URL for QuickBase.
   - Example: `https://builderprogram-USERNAME.quickbase.com/db/main?a=SignIn`
 
-- **`QUICKBASE_CODEPAGE_EDIT_URL`**:
+> **Note:** You may rename 'APPNAME1', 'APPNAME2', 'APPNAME3' etc to be your app name. However they cannot be removed or have spaces. The assigned names are used to log behavior while updating.
 
-  - The URL when you navigate to an individual code page in your app.
-  - Example: `https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/pageedit?pageID=`
-
-- **`QUICKBASE_CODEPAGES_URL`**:
+- **`APPNAME1_QUICKBASE_CODEPAGES_URL`**:
 
   - Navigate to the Pages section in your app. This is the page that lists all your code pages.
-  - `npm run build` quickbase-copy.html updates.
   - Example: `https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/AppDBPages`
 
-- **`QUICKBASE_HTML_PAGE_TITLE`**:
+- **`APPNAME1_QUICKBASE_CODEPAGE_EDIT_URL`**:
+
+  - The URL when you navigate to an individual code page.
+  - Example: `https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/pageedit?pageID=`
+
+- **`APPNAME1_QUICKBASE_HTML_PAGE_TITLE`**:
 
   - The HTML `<title></title>` for the generated HTML code page.
   - Example: `Page Title`
 
-- **`QUICKBASE_CODEPAGE_HTML_ID`**:
+- **`APPNAME1_QUICKBASE_CODEPAGE_HTML_ID`**:
 
   - The HTML code page ID.
   - Optional but recommended.
   - Example: `2`
 
-- **`QUICKBASE_CODEPAGE_JS_IDS`**:
+- **`APPNAME1_QUICKBASE_CODEPAGE_JS_IDS`**:
 
   - Comma-separated list of JavaScript code page IDs.
   - Example: `3,5`
 
-- **`QUICKBASE_CODEPAGE_CSS_IDS`**:
+- **`APPNAME1_QUICKBASE_CODEPAGE_CSS_IDS`**:
 
   - Comma-separated list of CSS code page IDs.
   - Example: `4,6`
@@ -114,22 +115,32 @@ See `.env.example` in the project files. You may use this as a template. Rename 
 > **Note:** Make sure to add `.env` to your `.gitignore` file to avoid exposing sensitive information.
 
 ```properties
-# QuickBase credentials.
+# QuickBase login
 QUICKBASE_USERNAME=
 QUICKBASE_PASSWORD=
-
-# QuickBase URLs.
 QUICKBASE_LOGIN_URL=
-QUICKBASE_CODEPAGE_EDIT_URL=
-QUICKBASE_CODEPAGES_URL=
+
+# Code Page URLs
+APPNAME1_QUICKBASE_CODEPAGES_URL=
+APPNAME1_QUICKBASE_CODEPAGE_EDIT_URL=
 
 # HTML <title>Page Title</title>
-QUICKBASE_HTML_PAGE_TITLE=
+APPNAME1_QUICKBASE_HTML_PAGE_TITLE=
 
-# QuickBase code page IDs.
-QUICKBASE_CODEPAGE_HTML_ID=
-QUICKBASE_CODEPAGE_JS_IDS=
-QUICKBASE_CODEPAGE_CSS_IDS=
+# QuickBase code page IDs
+APPNAME1_QUICKBASE_CODEPAGE_HTML_ID=
+APPNAME1_QUICKBASE_CODEPAGE_JS_IDS=
+APPNAME1_QUICKBASE_CODEPAGE_CSS_IDS=
+
+# Second app
+APPNAME2_QUICKBASE_CODEPAGES_URL=
+APPNAME2_QUICKBASE_CODEPAGE_EDIT_URL=
+APPNAME2_QUICKBASE_HTML_PAGE_TITLE=
+APPNAME2_QUICKBASE_CODEPAGE_HTML_ID=
+APPNAME2_QUICKBASE_CODEPAGE_JS_IDS=
+APPNAME2_QUICKBASE_CODEPAGE_CSS_IDS=
+
+# Additional apps follow the pattern above...
 ```
 
 ## Contributing
