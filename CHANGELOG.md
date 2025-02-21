@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.2.10...v2.0.0) (2025-02-21)
+
 ### [1.2.10](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.2.9...v1.2.10) (2025-02-20)
 
 Rename createCodePageHtml
