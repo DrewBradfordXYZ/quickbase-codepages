@@ -211,11 +211,22 @@ const updateCodePages = () => __awaiter(void 0, void 0, void 0, function* () {
             const { missingEnvVars, quickbasePagePath, htmlPageId, jsPageIds, cssPageIds, } = getEnvVariablesByAppIdentifier(appIdentifier);
             // Skip appIdentifier update if any required environment variables are missing
             if (missingEnvVars === 0) {
-                // Update HTML code page if htmlPageId is not empty
+                // Update HTML code page
                 if (htmlPageId && htmlFiles.length > 0) {
-                    const htmlFilePath = htmlFiles[0];
-                    const htmlCodeContent = fs.readFileSync(htmlFilePath, "utf8");
-                    yield updatePageContent(htmlPageId, htmlCodeContent, htmlFilePath, quickbasePagePath, page);
+                    const htmlFilePath = htmlFiles.find((file) => {
+                        const fileName = path.basename(file);
+                        return fileName.startsWith(`${appIdentifier}_`);
+                    });
+                    if (htmlFilePath) {
+                        const htmlCodeContent = fs.readFileSync(htmlFilePath, "utf8");
+                        yield updatePageContent(htmlPageId, htmlCodeContent, htmlFilePath, quickbasePagePath, page);
+                    }
+                    else {
+                        console.log(`No HTML file found with prefix: ${appIdentifier}_`);
+                    }
+                }
+                else {
+                    console.log(`No HTML files to process or htmlPageId is missing.`);
                 }
                 // Update JavaScript code pages
                 for (let i = 0; i < jsFiles.length; i++) {
