@@ -4,6 +4,7 @@ import puppeteer, { Page } from "puppeteer";
 import * as fs from "fs";
 import * as path from "path";
 import * as dotenv from "dotenv";
+import { resolve } from "path";
 import { fileURLToPath } from "url";
 import chalk from "chalk";
 
@@ -71,14 +72,94 @@ const extractPageName = async (page: Page): Promise<string> => {
   });
 };
 
+// Function to log into QuickBase
+const loginToQuickBase = async (
+  page: Page,
+  quickbaseUrl: string,
+  username: string,
+  password: string
+) => {
+  console.log(chalk.bold.underline.whiteBright("Logging in to QuickBase"));
+  let loginSuccess = false;
+  const maxLoginAttempts = 3;
+  let loginAttempt = 0;
+
+  while (!loginSuccess && loginAttempt < maxLoginAttempts) {
+    try {
+      loginAttempt++;
+      if (loginAttempt > 1) {
+        console.log(chalk.blue(`Login attempt ${loginAttempt}`));
+      }
+      await page.goto(quickbaseUrl, { timeout: 60000 });
+      await page.waitForSelector("input[name='loginid']", { timeout: 60000 });
+      await page.type("input[name='loginid']", username);
+      await page.type("input[name='password']", password);
+      await page.click("#signin");
+      await page.waitForNavigation({
+        waitUntil: "networkidle0",
+        timeout: 60000,
+      });
+
+      // Check if login was successful
+      const loginError = await page.$(".login-error");
+      if (loginError) {
+        throw new Error("Login failed. Please check your credentials.");
+      }
+
+      console.log(chalk.bold.green("Signed In to QuickBase."));
+      loginSuccess = true;
+    } catch (loginError) {
+      const errorMessage = (loginError as Error).message;
+      console.error(
+        chalk.red(`Login attempt ${loginAttempt} failed: ${errorMessage}`)
+      );
+      if (loginAttempt >= maxLoginAttempts) {
+        console.error(chalk.bold.bgRed("Max login attempts reached. Exiting."));
+        await page.browser().close();
+        return false;
+      }
+      // Add a delay before retrying
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+    }
+  }
+  return loginSuccess;
+};
+function getEnvVariablesByAppIdentifier(appIdentifier: string) {
+  console.log(chalk.bold.whiteBright.underline(`\nStarting ${appIdentifier}`));
+  const quickbasePagePath =
+    process.env[`${appIdentifier}_QUICKBASE_CODEPAGE_EDIT_URL`];
+  const htmlPageId = process.env[`${appIdentifier}_QUICKBASE_CODEPAGE_HTML_ID`];
+  const jsPageIds = process.env[`${appIdentifier}_QUICKBASE_CODEPAGE_JS_IDS`];
+  const cssPageIds = process.env[`${appIdentifier}_QUICKBASE_CODEPAGE_CSS_IDS`];
+
+  if (!quickbasePagePath || !htmlPageId || !jsPageIds || !cssPageIds) {
+    throw new Error(
+      `Missing environment variables for appIdentifier: ${appIdentifier}`
+    );
+  }
+
+  return {
+    quickbasePagePath,
+    htmlPageId,
+    jsPageIds: jsPageIds.split(","),
+    cssPageIds: cssPageIds.split(","),
+  };
+}
+
+const env = process.env;
+const appIdentifierSet = new Set<string>();
+
+// Collect appIdentifiers before _QUICKBASE_
+Object.keys(env).forEach((key) => {
+  const match = key.match(/^([^_]+)_QUICKBASE_.+$/);
+  if (match) {
+    appIdentifierSet.add(match[1]);
+  }
+});
 const updateCodePages = async () => {
   const quickbaseUrl = process.env.QUICKBASE_LOGIN_URL!;
-  const quickbasePagePath = process.env.QUICKBASE_CODEPAGE_EDIT_URL!;
   const username = process.env.QUICKBASE_USERNAME!;
   const password = process.env.QUICKBASE_PASSWORD!;
-  const htmlPageId = process.env.QUICKBASE_CODEPAGE_HTML_ID!;
-  const jsPageIds = process.env.QUICKBASE_CODEPAGE_JS_IDS!.split(",");
-  const cssPageIds = process.env.QUICKBASE_CODEPAGE_CSS_IDS!.split(",");
 
   const jsFiles = getAllFiles(".js");
   const cssFiles = getAllFiles(".css");
@@ -92,152 +173,116 @@ const updateCodePages = async () => {
   const page = await browser.newPage();
 
   try {
-    // Log in to QuickBase
-    console.log(chalk.bold.underline.whiteBright("Logging in to QuickBase"));
-    let loginSuccess = false;
-    const maxLoginAttempts = 3;
-    let loginAttempt = 0;
-
-    while (!loginSuccess && loginAttempt < maxLoginAttempts) {
-      try {
-        loginAttempt++;
-        if (loginAttempt > 1) {
-          console.log(chalk.blue(`Login attempt ${loginAttempt}`));
-        }
-        await page.goto(quickbaseUrl, { timeout: 60000 });
-        await page.waitForSelector("input[name='loginid']", { timeout: 60000 });
-        await page.type("input[name='loginid']", username);
-        await page.type("input[name='password']", password);
-        await page.click("#signin");
-        await page.waitForNavigation({
-          waitUntil: "networkidle0",
-          timeout: 60000,
-        });
-
-        // Check if login was successful
-        const loginError = await page.$(".login-error");
-        if (loginError) {
-          throw new Error("Login failed. Please check your credentials.");
-        }
-
-        console.log(chalk.bold.green("Signed In to QuickBase."));
-        loginSuccess = true;
-      } catch (loginError) {
-        console.error(
-          chalk.red(
-            `Login attempt ${loginAttempt} failed: ${
-              (loginError as Error).message
-            }`
-          )
-        );
-        if (loginAttempt >= maxLoginAttempts) {
-          console.error(
-            chalk.bold.bgRed("Max login attempts reached. Exiting.")
-          );
-          await browser.close();
-          return;
-        }
-        // Add a delay before retrying
-        await new Promise((resolve) => setTimeout(resolve, 5000));
-      }
+    const loginSuccess = await loginToQuickBase(
+      page,
+      quickbaseUrl,
+      username,
+      password
+    );
+    if (!loginSuccess) {
+      return;
     }
 
-    // Function to update code page content
-    const updatePageContent = async (
-      pageId: string,
-      codeContent: string,
-      filePath: string
-    ) => {
-      const url = `${quickbasePagePath}${pageId}`;
-      const maxRetries = 3;
-      let attempt = 0;
-      let success = false;
-      let codePageName = "Unknown"; // Initialize pageName
+    // Iterate over each appIdentifier and call updatePageContent
+    for (const appIdentifier of appIdentifierSet) {
+      const { quickbasePagePath, htmlPageId, jsPageIds, cssPageIds } =
+        getEnvVariablesByAppIdentifier(appIdentifier);
+      // Function to update code page content
+      const updatePageContent = async (
+        pageId: string,
+        codeContent: string,
+        filePath: string
+      ) => {
+        const url = `${quickbasePagePath}${pageId}`;
+        const maxRetries = 3;
+        let attempt = 0;
+        let success = false;
+        let codePageName = "Unknown"; // Initialize pageName
 
-      while (attempt < maxRetries && !success) {
-        try {
-          attempt++;
-          logNavigationAttempt(attempt, url);
+        while (attempt < maxRetries && !success) {
+          try {
+            attempt++;
+            logNavigationAttempt(attempt, url);
 
-          await page.goto(url, { timeout: 30000 }); // 30 seconds timeout
-          await page.waitForSelector("#pagetext", { timeout: 30000 }); // Wait for the element where the code goes
+            await page.goto(url, { timeout: 30000 }); // 30 seconds timeout
+            await page.waitForSelector("#pagetext", { timeout: 30000 }); // Wait for the element where the code goes
 
-          // Extract the value of the name field
-          codePageName = await extractPageName(page);
+            // Extract the value of the name field
+            codePageName = await extractPageName(page);
 
-          console.log(
-            `${chalk.bold.whiteBright(`Opened code-page-${pageId}`)}`
-          );
-          success = true;
-        } catch (error) {
-          console.error(
-            chalk.yellow(
-              `Attempt ${attempt}: Failed to navigate to code-page-${pageId}`
-            )
-          );
+            console.log(
+              `${chalk.bold.whiteBright(`Opened code-page-${pageId}`)}`
+            );
+            success = true;
+          } catch (error) {
+            console.error(
+              chalk.yellow(
+                `Attempt ${attempt}: Failed to navigate to code-page-${pageId}`
+              )
+            );
 
-          const enableErrorDetails = false; // Set to true to display error details
+            const enableErrorDetails = false; // Set to true to display error details
 
-          if (attempt >= maxRetries) {
-            console.error(chalk.bold.bgRed("Max retries reached."));
-            console.error(chalk.bold.red(`${url}`));
-            if (enableErrorDetails) {
-              console.error(error);
+            if (attempt >= maxRetries) {
+              console.error(chalk.bold.bgRed("Max retries reached."));
+              console.error(chalk.bold.red(`${url}`));
+              if (enableErrorDetails) {
+                console.error(error);
+              }
+              return;
             }
-            return;
-          }
 
-          // Add a delay before retrying
-          await new Promise((resolve) => setTimeout(resolve, 5000));
+            // Add a delay before retrying
+            await new Promise((resolve) => setTimeout(resolve, 5000));
+          }
         }
+
+        // Update the code page content
+        await page.evaluate((codeContent) => {
+          const pageText = document.querySelector(
+            "#pagetext"
+          ) as HTMLTextAreaElement;
+          if (pageText) {
+            pageText.value = codeContent;
+          } else {
+            throw new Error("Code editor element not found");
+          }
+        }, codeContent);
+
+        // Save the changes
+        await page.click("#btnSaveDone");
+        console.log(
+          `${chalk.bold.whiteBright("Updating")} ${chalk.hex("#FFA500")(
+            `${codePageName}`
+          )} ${chalk.bold.whiteBright("with")} ${chalk.hex("#FFA500")(
+            path.basename(filePath)
+          )}`
+        );
+        await page.waitForNavigation();
+        console.log(chalk.bold.bgGreen(`Successfully Saved`));
+      };
+      // Update HTML code page if htmlPageId is not empty
+      if (htmlPageId && htmlFiles.length > 0) {
+        const htmlFilePath = htmlFiles[0];
+        const htmlCodeContent = fs.readFileSync(htmlFilePath, "utf8");
+        await updatePageContent(htmlPageId, htmlCodeContent, htmlFilePath);
       }
 
-      // Update the code page content
-      await page.evaluate((codeContent) => {
-        const pageText = document.querySelector(
-          "#pagetext"
-        ) as HTMLTextAreaElement;
-        if (pageText) {
-          pageText.value = codeContent;
-        } else {
-          throw new Error("Code editor element not found");
-        }
-      }, codeContent);
+      // Update JavaScript code pages
+      for (let i = 0; i < jsFiles.length; i++) {
+        const jsFilePath = jsFiles[i];
+        const jsCodeContent = fs.readFileSync(jsFilePath, "utf8");
+        const jsPageId = jsPageIds[i];
+        await updatePageContent(jsPageId, jsCodeContent, jsFilePath);
+      }
 
-      // Save the changes
-      await page.click("#btnSaveDone");
-      console.log(
-        `${chalk.bold.whiteBright("Updating")} ${chalk.hex("#FFA500")(
-          `${codePageName}`
-        )} ${chalk.bold.whiteBright("with")} ${chalk.hex("#FFA500")(
-          path.basename(filePath)
-        )}`
-      );
-      await page.waitForNavigation();
-      console.log(chalk.bold.bgGreen(`Successfully Saved`));
-    };
-
-    // Update HTML code page if htmlPageId is not empty
-    if (htmlPageId && htmlFiles.length > 0) {
-      const htmlFilePath = htmlFiles[0];
-      const htmlCodeContent = fs.readFileSync(htmlFilePath, "utf8");
-      await updatePageContent(htmlPageId, htmlCodeContent, htmlFilePath);
-    }
-
-    // Update JavaScript code pages
-    for (let i = 0; i < jsFiles.length; i++) {
-      const jsFilePath = jsFiles[i];
-      const jsCodeContent = fs.readFileSync(jsFilePath, "utf8");
-      const jsPageId = jsPageIds[i];
-      await updatePageContent(jsPageId, jsCodeContent, jsFilePath);
-    }
-
-    // Update CSS code pages
-    for (let i = 0; i < cssFiles.length; i++) {
-      const cssFilePath = cssFiles[i];
-      const cssCodeContent = fs.readFileSync(cssFilePath, "utf8");
-      const cssPageId = cssPageIds[i];
-      await updatePageContent(cssPageId, cssCodeContent, cssFilePath);
+      // Update CSS code pages
+      for (let i = 0; i < cssFiles.length; i++) {
+        const cssFilePath = cssFiles[i];
+        const cssCodeContent = fs.readFileSync(cssFilePath, "utf8");
+        const cssPageId = cssPageIds[i];
+        await updatePageContent(cssPageId, cssCodeContent, cssFilePath);
+      }
     }
 
     // Set to true to test screenshot capture
@@ -269,7 +314,7 @@ const updateCodePages = async () => {
 };
 
 // Export the function for external use
-export { updateCodePages };
+export { updateCodePages, loginToQuickBase };
 
 // If the script is run directly, call the function
 if (import.meta.url === `file://${__filename}`) {

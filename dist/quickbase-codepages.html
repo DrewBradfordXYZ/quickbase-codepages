@@ -1,0 +1,25 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QuickBase</title>
+    <!-- Make sure to rename the .env.example file to .env -->
+    <!-- Update QUICKBASE_CODEPAGES_URL in the .env file. -->
+    <!-- Update QUICKBASE_CODEPAGE_CSS_IDS in the .env file. -->
+  	<link href="<-QUICKBASE-CODEPAGES-URL->?a=dbpage&pageID=<-QUICKBASE-CODEPAGE-CSS-IDS->" rel="stylesheet">
+</head>
+<body>
+  <noscript>
+    <strong>
+    We're sorry but this app doesn't work properly without
+    JavaScript enabled. Please enable it to continue.
+    </strong>
+  </noscript>
+  <div id="root"></div>
+    <!-- Update QUICKBASE_CODEPAGES_URL in the .env file. -->
+    <!-- Update QUICKBASE_CODEPAGE_JS_IDS in the .env file. -->
+  	<script src="<-QUICKBASE-CODEPAGES-URL->?a=dbpage&pageID=<-QUICKBASE-CODEPAGE-JS-IDS->"></script>
+</body>
+</html>
