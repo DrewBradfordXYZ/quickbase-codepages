@@ -11,7 +11,7 @@
     "uninstall-quickbase-codepages": "./dist/uninstall.js"
   },
   "scripts": {
-    "build": "tsc && createCodePageHtml && hideDefaultHtml",
+    "build": "tsc",
     "postbuild": "node postbuild.js",
     "postinstall": "node postinstall.js",
     "release": "standard-version",

@@ -124,21 +124,44 @@ const loginToQuickBase = async (
   }
   return loginSuccess;
 };
-function getEnvVariablesByAppIdentifier(appIdentifier: string) {
+type EnvVariables = {
+  missingEnvVars: number;
+  quickbasePagePath: string;
+  htmlPageId: string;
+  jsPageIds: string[];
+  cssPageIds: string[];
+};
+
+function getEnvVariablesByAppIdentifier(appIdentifier: string): EnvVariables {
   console.log(chalk.bold.whiteBright.underline(`\nStarting ${appIdentifier}`));
   const quickbasePagePath =
-    process.env[`${appIdentifier}_QUICKBASE_CODEPAGE_EDIT_URL`];
-  const htmlPageId = process.env[`${appIdentifier}_QUICKBASE_CODEPAGE_HTML_ID`];
-  const jsPageIds = process.env[`${appIdentifier}_QUICKBASE_CODEPAGE_JS_IDS`];
-  const cssPageIds = process.env[`${appIdentifier}_QUICKBASE_CODEPAGE_CSS_IDS`];
+    process.env[`${appIdentifier}_QUICKBASE_CODEPAGE_EDIT_URL`] || "";
+  const htmlPageId =
+    process.env[`${appIdentifier}_QUICKBASE_CODEPAGE_HTML_ID`] || "";
+  const jsPageIds =
+    process.env[`${appIdentifier}_QUICKBASE_CODEPAGE_JS_IDS`] || "";
+  const cssPageIds =
+    process.env[`${appIdentifier}_QUICKBASE_CODEPAGE_CSS_IDS`] || "";
 
-  if (!quickbasePagePath || !htmlPageId || !jsPageIds || !cssPageIds) {
-    throw new Error(
-      `Missing environment variables for appIdentifier: ${appIdentifier}`
-    );
+  let missingEnvVars = 0;
+  if (!quickbasePagePath) {
+    console.warn(`Missing ${appIdentifier}_QUICKBASE_CODEPAGE_EDIT_URL`);
+    missingEnvVars++;
+  }
+  if (!jsPageIds) {
+    console.warn(`Missing ${appIdentifier}_QUICKBASE_CODEPAGE_JS_IDS`);
+    missingEnvVars++;
+  }
+  if (!cssPageIds) {
+    console.warn(`Missing ${appIdentifier}_QUICKBASE_CODEPAGE_CSS_IDS`);
+    missingEnvVars++;
+  }
+  if (!htmlPageId) {
+    console.warn("Skipping HTML page update. Missing HTML page ID.");
   }
 
   return {
+    missingEnvVars,
     quickbasePagePath,
     htmlPageId,
     jsPageIds: jsPageIds.split(","),
@@ -156,6 +179,72 @@ Object.keys(env).forEach((key) => {
     appIdentifierSet.add(match[1]);
   }
 });
+const updatePageContent = async (
+  pageId: string,
+  codeContent: string,
+  filePath: string,
+  quickbasePagePath: string,
+  page: any
+) => {
+  const url = `${quickbasePagePath}${pageId}`;
+  const maxRetries = 3;
+  let attempt = 0;
+  let success = false;
+  let codePageName = "Unknown"; // Initialize pageName
+
+  while (attempt < maxRetries && !success) {
+    try {
+      attempt++;
+      logNavigationAttempt(attempt, url);
+
+      await page.goto(url, { timeout: 30000 }); // 30 seconds timeout
+      await page.waitForSelector("#pagetext", { timeout: 30000 }); // Wait for the element where the code goes
+
+      // Extract the value of the name field
+      codePageName = await extractPageName(page);
+
+      console.log(`${chalk.bold.whiteBright(`Opened code-page-${pageId}`)}`);
+      success = true;
+    } catch (error) {
+      console.error(
+        chalk.yellow(
+          `Attempt ${attempt} to open code-page-${pageId} failed: ${
+            (error as Error).message
+          }`
+        )
+      );
+    }
+  }
+
+  if (!success) {
+    throw new Error(
+      `Failed to open code-page-${pageId} after ${maxRetries} attempts`
+    );
+  }
+
+  // Update the code page content
+  await page.evaluate((codeContent: string) => {
+    const pageText = document.querySelector("#pagetext") as HTMLTextAreaElement;
+    if (pageText) {
+      pageText.value = codeContent;
+    } else {
+      throw new Error("Code editor element not found");
+    }
+  }, codeContent);
+
+  // Save the changes
+  await page.click("#btnSaveDone");
+  console.log(
+    `${chalk.bold.whiteBright("Updating")} ${chalk.hex("#FFA500")(
+      `${codePageName}`
+    )} ${chalk.bold.whiteBright("with")} ${chalk.hex("#FFA500")(
+      path.basename(filePath)
+    )}`
+  );
+  await page.waitForNavigation();
+  console.log(chalk.bold.bgGreen(`Successfully Saved`));
+};
+
 const updateCodePages = async () => {
   const quickbaseUrl = process.env.QUICKBASE_LOGIN_URL!;
   const username = process.env.QUICKBASE_USERNAME!;
@@ -185,103 +274,59 @@ const updateCodePages = async () => {
 
     // Iterate over each appIdentifier and call updatePageContent
     for (const appIdentifier of appIdentifierSet) {
-      const { quickbasePagePath, htmlPageId, jsPageIds, cssPageIds } =
-        getEnvVariablesByAppIdentifier(appIdentifier);
-      // Function to update code page content
-      const updatePageContent = async (
-        pageId: string,
-        codeContent: string,
-        filePath: string
-      ) => {
-        const url = `${quickbasePagePath}${pageId}`;
-        const maxRetries = 3;
-        let attempt = 0;
-        let success = false;
-        let codePageName = "Unknown"; // Initialize pageName
+      const {
+        missingEnvVars,
+        quickbasePagePath,
+        htmlPageId,
+        jsPageIds,
+        cssPageIds,
+      } = getEnvVariablesByAppIdentifier(appIdentifier);
 
-        while (attempt < maxRetries && !success) {
-          try {
-            attempt++;
-            logNavigationAttempt(attempt, url);
-
-            await page.goto(url, { timeout: 30000 }); // 30 seconds timeout
-            await page.waitForSelector("#pagetext", { timeout: 30000 }); // Wait for the element where the code goes
-
-            // Extract the value of the name field
-            codePageName = await extractPageName(page);
-
-            console.log(
-              `${chalk.bold.whiteBright(`Opened code-page-${pageId}`)}`
-            );
-            success = true;
-          } catch (error) {
-            console.error(
-              chalk.yellow(
-                `Attempt ${attempt}: Failed to navigate to code-page-${pageId}`
-              )
-            );
-
-            const enableErrorDetails = false; // Set to true to display error details
-
-            if (attempt >= maxRetries) {
-              console.error(chalk.bold.bgRed("Max retries reached."));
-              console.error(chalk.bold.red(`${url}`));
-              if (enableErrorDetails) {
-                console.error(error);
-              }
-              return;
-            }
-
-            // Add a delay before retrying
-            await new Promise((resolve) => setTimeout(resolve, 5000));
-          }
+      if (missingEnvVars === 0) {
+        // Update HTML code page if htmlPageId is not empty
+        if (htmlPageId && htmlFiles.length > 0) {
+          const htmlFilePath = htmlFiles[0];
+          const htmlCodeContent = fs.readFileSync(htmlFilePath, "utf8");
+          await updatePageContent(
+            htmlPageId,
+            htmlCodeContent,
+            htmlFilePath,
+            quickbasePagePath,
+            page
+          );
         }
 
-        // Update the code page content
-        await page.evaluate((codeContent) => {
-          const pageText = document.querySelector(
-            "#pagetext"
-          ) as HTMLTextAreaElement;
-          if (pageText) {
-            pageText.value = codeContent;
-          } else {
-            throw new Error("Code editor element not found");
-          }
-        }, codeContent);
+        // Update JavaScript code pages
+        for (let i = 0; i < jsFiles.length; i++) {
+          const jsFilePath = jsFiles[i];
+          const jsCodeContent = fs.readFileSync(jsFilePath, "utf8");
+          const jsPageId = jsPageIds[i];
+          await updatePageContent(
+            jsPageId,
+            jsCodeContent,
+            jsFilePath,
+            quickbasePagePath,
+            page
+          );
+        }
 
-        // Save the changes
-        await page.click("#btnSaveDone");
-        console.log(
-          `${chalk.bold.whiteBright("Updating")} ${chalk.hex("#FFA500")(
-            `${codePageName}`
-          )} ${chalk.bold.whiteBright("with")} ${chalk.hex("#FFA500")(
-            path.basename(filePath)
-          )}`
+        // Update CSS code pages
+        for (let i = 0; i < cssFiles.length; i++) {
+          const cssFilePath = cssFiles[i];
+          const cssCodeContent = fs.readFileSync(cssFilePath, "utf8");
+          const cssPageId = cssPageIds[i];
+          await updatePageContent(
+            cssPageId,
+            cssCodeContent,
+            cssFilePath,
+            quickbasePagePath,
+            page
+          );
+        }
+      } else {
+        console.warn(
+          `Skipping update for ${appIdentifier} due to missing environment variables.`
         );
-        await page.waitForNavigation();
-        console.log(chalk.bold.bgGreen(`Successfully Saved`));
-      };
-      // Update HTML code page if htmlPageId is not empty
-      if (htmlPageId && htmlFiles.length > 0) {
-        const htmlFilePath = htmlFiles[0];
-        const htmlCodeContent = fs.readFileSync(htmlFilePath, "utf8");
-        await updatePageContent(htmlPageId, htmlCodeContent, htmlFilePath);
-      }
-
-      // Update JavaScript code pages
-      for (let i = 0; i < jsFiles.length; i++) {
-        const jsFilePath = jsFiles[i];
-        const jsCodeContent = fs.readFileSync(jsFilePath, "utf8");
-        const jsPageId = jsPageIds[i];
-        await updatePageContent(jsPageId, jsCodeContent, jsFilePath);
-      }
-
-      // Update CSS code pages
-      for (let i = 0; i < cssFiles.length; i++) {
-        const cssFilePath = cssFiles[i];
-        const cssCodeContent = fs.readFileSync(cssFilePath, "utf8");
-        const cssPageId = cssPageIds[i];
-        await updatePageContent(cssPageId, cssCodeContent, cssFilePath);
       }
     }
 

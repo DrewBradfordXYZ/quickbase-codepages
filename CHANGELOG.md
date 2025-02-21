@@ -4,10 +4,11 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [2.1.0](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v2.0.0...v2.1.0) (2025-02-21)
 
+feat: If an app has missing env variables, log what is missing and skip app updates
 
 ### Features
 
-* update multiple apps ([45a1c13](https://github.com/DrewBradfordXYZ/quickbase-codepages/commit/45a1c135c5ea9e9b471518c0bc228ad3b4a14051))
+- update multiple apps ([45a1c13](https://github.com/DrewBradfordXYZ/quickbase-codepages/commit/45a1c135c5ea9e9b471518c0bc228ad3b4a14051))
 
 ## [2.0.0](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.2.10...v2.0.0) (2025-02-21)
 
