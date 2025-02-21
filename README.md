@@ -75,7 +75,7 @@ This project requires environment variables to be set in your `.env` file.
   - Logout to get the sign-in URL for QuickBase.
   - Example: `https://builderprogram-USERNAME.quickbase.com/db/main?a=SignIn`
 
-> **Note:** You may rename 'APPNAME1', 'APPNAME2', 'APPNAME3' etc to be your app name. However they cannot be removed or have spaces. The app names are displayed in the terminal while updating, so renaming is helpful.
+> **Note:** You may rename 'APPNAME#' to be your app name. However they cannot be removed or have spaces. The app names are displayed in the terminal while updating, so renaming is helpful.
 
 - **`APPNAME_QUICKBASE_CODEPAGES_URL`**:
 
@@ -120,14 +120,10 @@ QUICKBASE_USERNAME=
 QUICKBASE_PASSWORD=
 QUICKBASE_LOGIN_URL=
 
-# Code Page URLs
+# Rename 'APPNAME#' to your app name with no spaces.
 APPNAME1_QUICKBASE_CODEPAGES_URL=
 APPNAME1_QUICKBASE_CODEPAGE_EDIT_URL=
-
-# HTML <title>Page Title</title>
 APPNAME1_QUICKBASE_HTML_PAGE_TITLE=
-
-# QuickBase code page IDs
 APPNAME1_QUICKBASE_CODEPAGE_HTML_ID=
 APPNAME1_QUICKBASE_CODEPAGE_JS_IDS=
 APPNAME1_QUICKBASE_CODEPAGE_CSS_IDS=
