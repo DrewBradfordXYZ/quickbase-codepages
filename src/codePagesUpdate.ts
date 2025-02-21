@@ -276,7 +276,7 @@ const updateCodePages = async () => {
       return;
     }
 
-    //Ex: {'APP1', 'APP2', 'APP3'}
+    //Ex: {'APPNAME1', 'APPNAME2', 'APP3'}
     const appIdentifierSet = getAppIdentifiers();
 
     // Iterate over each appIdentifier and call updatePageContent
