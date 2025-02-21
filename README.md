@@ -44,7 +44,7 @@ auto updates code page content with production files in your projects `./dist` f
 
 is extended with additional features to set up a QuickBase ready project structure:
 
-- Each app you target for update generates a `APPNAME_yourRootProjectName.html` file in your project's `./dist` folder. Each HTML file contains pre-generated links to your JS and CSS code page URLs.
+- Each app you target generates an `APPNAME_yourRootProjectName.html` file in your project's `./dist` folder. Each HTML file contains pre-generated links to your JS and CSS code page URLs.
   - To turn this behavior off, remove `&& createCodePageHtml` from the `"build"` script in `package.json`
 - The default `index.html` is no longer needed and is moved into `./dist/unused/`. This folder is ignored by `npm run codepages` and will not be saved to a code page.
   - To turn this behavior off, remove `&& hideDefaultHtml` from the `"build"` script in `package.json`.
