@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v2.0.0...v2.1.0) (2025-02-21)
+
+
+### Features
+
+* update multiple apps ([45a1c13](https://github.com/DrewBradfordXYZ/quickbase-codepages/commit/45a1c135c5ea9e9b471518c0bc228ad3b4a14051))
+
 ## [2.0.0](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v1.2.10...v2.0.0) (2025-02-21)
 
 Feature: Update multiple apps with .env app prefix identifiers
