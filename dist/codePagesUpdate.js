@@ -131,15 +131,6 @@ function getEnvVariablesByAppIdentifier(appIdentifier) {
         cssPageIds: cssPageIds.split(","),
     };
 }
-const env = process.env;
-const appIdentifierSet = new Set();
-// Collect appIdentifiers before _QUICKBASE_
-Object.keys(env).forEach((key) => {
-    const match = key.match(/^([^_]+)_QUICKBASE_.+$/);
-    if (match) {
-        appIdentifierSet.add(match[1]);
-    }
-});
 const updatePageContent = (pageId, codeContent, filePath, quickbasePagePath, page) => __awaiter(void 0, void 0, void 0, function* () {
     const url = `${quickbasePagePath}${pageId}`;
     const maxRetries = 3;
@@ -181,12 +172,14 @@ const updatePageContent = (pageId, codeContent, filePath, quickbasePagePath, pag
     console.log(chalk.bold.bgGreen(`Successfully Saved`));
 });
 const updateCodePages = () => __awaiter(void 0, void 0, void 0, function* () {
-    const quickbaseUrl = process.env.QUICKBASE_LOGIN_URL;
-    const username = process.env.QUICKBASE_USERNAME;
-    const password = process.env.QUICKBASE_PASSWORD;
+    // Get ./dist files with .js, .css, and .html extensions
     const jsFiles = getAllFiles(".js");
     const cssFiles = getAllFiles(".css");
     const htmlFiles = getAllFiles(".html", ""); // Specify the root dist directory for HTML files
+    // Get QuickBase login credentials
+    const quickbaseUrl = process.env.QUICKBASE_LOGIN_URL;
+    const username = process.env.QUICKBASE_USERNAME;
+    const password = process.env.QUICKBASE_PASSWORD;
     // --no-sandbox is required when running Puppeteer on a Linux server
     const browser = yield puppeteer.launch({
         headless: true,
@@ -198,9 +191,20 @@ const updateCodePages = () => __awaiter(void 0, void 0, void 0, function* () {
         if (!loginSuccess) {
             return;
         }
+        // collect ${appName}_QUICKBASE_ environment variables
+        const env = process.env;
+        const appIdentifierSet = new Set();
+        Object.keys(env).forEach((key) => {
+            const match = key.match(/^([^_]+)_QUICKBASE_.+$/);
+            if (match) {
+                appIdentifierSet.add(match[1]);
+            }
+        });
         // Iterate over each appIdentifier and call updatePageContent
         for (const appIdentifier of appIdentifierSet) {
+            // Process environment variables for each appIdentifier
             const { missingEnvVars, quickbasePagePath, htmlPageId, jsPageIds, cssPageIds, } = getEnvVariablesByAppIdentifier(appIdentifier);
+            // Skip appIdentifier update if any required environment variables are missing
             if (missingEnvVars === 0) {
                 // Update HTML code page if htmlPageId is not empty
                 if (htmlPageId && htmlFiles.length > 0) {
@@ -251,9 +255,9 @@ const updateCodePages = () => __awaiter(void 0, void 0, void 0, function* () {
     finally {
         yield browser.close();
     }
-});
+}); // End of updateCodePages function
 // Export the function for external use
-export { updateCodePages, loginToQuickBase };
+export { updateCodePages };
 // If the script is run directly, call the function
 if (import.meta.url === `file://${__filename}`) {
     updateCodePages();

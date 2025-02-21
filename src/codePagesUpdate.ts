@@ -169,16 +169,6 @@ function getEnvVariablesByAppIdentifier(appIdentifier: string): EnvVariables {
   };
 }
 
-const env = process.env;
-const appIdentifierSet = new Set<string>();
-
-// Collect appIdentifiers before _QUICKBASE_
-Object.keys(env).forEach((key) => {
-  const match = key.match(/^([^_]+)_QUICKBASE_.+$/);
-  if (match) {
-    appIdentifierSet.add(match[1]);
-  }
-});
 const updatePageContent = async (
   pageId: string,
   codeContent: string,
@@ -246,13 +236,14 @@ const updatePageContent = async (
 };
 
 const updateCodePages = async () => {
-  const quickbaseUrl = process.env.QUICKBASE_LOGIN_URL!;
-  const username = process.env.QUICKBASE_USERNAME!;
-  const password = process.env.QUICKBASE_PASSWORD!;
-
+  // Get ./dist files with .js, .css, and .html extensions
   const jsFiles = getAllFiles(".js");
   const cssFiles = getAllFiles(".css");
   const htmlFiles = getAllFiles(".html", ""); // Specify the root dist directory for HTML files
+  // Get QuickBase login credentials
+  const quickbaseUrl = process.env.QUICKBASE_LOGIN_URL!;
+  const username = process.env.QUICKBASE_USERNAME!;
+  const password = process.env.QUICKBASE_PASSWORD!;
 
   // --no-sandbox is required when running Puppeteer on a Linux server
   const browser = await puppeteer.launch({
@@ -272,8 +263,19 @@ const updateCodePages = async () => {
       return;
     }
 
+    // collect ${appName}_QUICKBASE_ environment variables
+    const env = process.env;
+    const appIdentifierSet = new Set<string>();
+    Object.keys(env).forEach((key) => {
+      const match = key.match(/^([^_]+)_QUICKBASE_.+$/);
+      if (match) {
+        appIdentifierSet.add(match[1]);
+      }
+    });
+
     // Iterate over each appIdentifier and call updatePageContent
     for (const appIdentifier of appIdentifierSet) {
+      // Process environment variables for each appIdentifier
       const {
         missingEnvVars,
         quickbasePagePath,
@@ -282,6 +284,7 @@ const updateCodePages = async () => {
         cssPageIds,
       } = getEnvVariablesByAppIdentifier(appIdentifier);
 
+      // Skip appIdentifier update if any required environment variables are missing
       if (missingEnvVars === 0) {
         // Update HTML code page if htmlPageId is not empty
         if (htmlPageId && htmlFiles.length > 0) {
@@ -356,10 +359,10 @@ const updateCodePages = async () => {
   } finally {
     await browser.close();
   }
-};
+}; // End of updateCodePages function
 
 // Export the function for external use
-export { updateCodePages, loginToQuickBase };
+export { updateCodePages };
 
 // If the script is run directly, call the function
 if (import.meta.url === `file://${__filename}`) {
