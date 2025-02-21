@@ -131,7 +131,18 @@ type EnvVariables = {
   jsPageIds: string[];
   cssPageIds: string[];
 };
-
+// Function to get app identifiers from environment variables
+const getAppIdentifiers = (): Set<string> => {
+  const env = process.env;
+  const appIdentifierSet = new Set<string>();
+  Object.keys(env).forEach((key) => {
+    const match = key.match(/^([^_]+)_QUICKBASE_.+$/);
+    if (match) {
+      appIdentifierSet.add(match[1]);
+    }
+  });
+  return appIdentifierSet;
+};
 function getEnvVariablesByAppIdentifier(appIdentifier: string): EnvVariables {
   console.log(chalk.bold.whiteBright.underline(`\nStarting ${appIdentifier}`));
   const quickbasePagePath =
@@ -233,19 +244,6 @@ const updatePageContent = async (
   );
   await page.waitForNavigation();
   console.log(chalk.bold.bgGreen(`Successfully Saved`));
-};
-
-// Function to get app identifiers from environment variables
-const getAppIdentifiers = (): Set<string> => {
-  const env = process.env;
-  const appIdentifierSet = new Set<string>();
-  Object.keys(env).forEach((key) => {
-    const match = key.match(/^([^_]+)_QUICKBASE_.+$/);
-    if (match) {
-      appIdentifierSet.add(match[1]);
-    }
-  });
-  return appIdentifierSet;
 };
 
 const updateCodePages = async () => {

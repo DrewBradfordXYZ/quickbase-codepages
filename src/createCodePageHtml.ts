@@ -4,20 +4,43 @@ import fs from "fs";
 import path from "path";
 import { findUp } from "find-up";
 import dotenv from "dotenv";
+import { get } from "http";
 
 dotenv.config();
 
-function generateHtml() {
-  const htmlTitle = process.env.QUICKBASE_HTML_PAGE_TITLE || "QuickBase";
-  const cssPageIds = process.env.QUICKBASE_CODEPAGE_CSS_IDS
-    ? process.env.QUICKBASE_CODEPAGE_CSS_IDS.split(",")
-    : ["<-QUICKBASE-CODEPAGE-CSS-IDS->"];
-  const jsPageIds = process.env.QUICKBASE_CODEPAGE_JS_IDS
-    ? process.env.QUICKBASE_CODEPAGE_JS_IDS.split(",")
+// Function to get app identifiers from environment variables
+const getAppIdentifiers = (): Set<string> => {
+  const env = process.env;
+  const appIdentifierSet = new Set<string>();
+  Object.keys(env).forEach((key) => {
+    const match = key.match(/^([^_]+)_QUICKBASE_.+$/);
+    if (match) {
+      appIdentifierSet.add(match[1]);
+    }
+  });
+  return appIdentifierSet;
+};
+function getEnvironmentVariables(appIdentifier: string) {
+  const htmlTitle = process.env[`${appIdentifier}_QUICKBASE_HTML_PAGE_TITLE`];
+  const cssPageIds = process.env[
+    `${appIdentifier}_QUICKBASE_CODEPAGE_CSS_IDS`
+  ]!.split(",") || ["<-QUICKBASE-CODEPAGE-CSS-IDS->"];
+  const jsPageIds = process.env[`${appIdentifier}_QUICKBASE_CODEPAGE_JS_IDS`]
+    ? process.env[`${appIdentifier}_QUICKBASE_CODEPAGE_JS_IDS`]!.split(",")
     : ["<-QUICKBASE-CODEPAGE-JS-IDS->"];
-  const quickbasePagesUrl =
-    process.env.QUICKBASE_CODEPAGES_URL || "<-QUICKBASE-CODEPAGES-URL->";
+  const quickbasePagesUrl = process.env[
+    `${appIdentifier}_QUICKBASE_CODEPAGES_URL`
+  ]
+    ? process.env[`${appIdentifier}_QUICKBASE_CODEPAGES_URL`]
+    : "<-QUICKBASE-CODEPAGES-URL->";
 
+  return { htmlTitle, cssPageIds, jsPageIds, quickbasePagesUrl };
+}
+function generateHtmlLinks(
+  cssPageIds: string[],
+  jsPageIds: string[],
+  quickbasePagesUrl: string
+) {
   const cssLinks = cssPageIds
     .map(
       (id, index) =>
@@ -36,17 +59,26 @@ function generateHtml() {
     )
     .join("\n");
 
-  const commentsPageUrl = process.env.QUICKBASE_CODEPAGES_URL
+  return { cssLinks, jsScripts };
+}
+function generateEnvironmentComments(appIdentifier: string) {
+  const commentsPageUrl = process.env[
+    `${appIdentifier}_QUICKBASE_CODEPAGES_URL`
+  ]
     ? ""
-    : "    <!-- Update QUICKBASE_CODEPAGES_URL in the .env file. -->";
+    : `    <!-- Update ${appIdentifier}_QUICKBASE_CODEPAGES_URL in the .env file. -->`;
 
-  const commentsCssPageIds = process.env.QUICKBASE_CODEPAGE_CSS_IDS
+  const commentsCssPageIds = process.env[
+    `${appIdentifier}_QUICKBASE_CODEPAGE_CSS_IDS`
+  ]
     ? ""
-    : "    <!-- Update QUICKBASE_CODEPAGE_CSS_IDS in the .env file. -->";
+    : `    <!-- Update ${appIdentifier}_QUICKBASE_CODEPAGE_CSS_IDS in the .env file. -->`;
 
-  const commentsJsPageIds = process.env.QUICKBASE_CODEPAGE_JS_IDS
+  const commentsJsPageIds = process.env[
+    `${appIdentifier}_QUICKBASE_CODEPAGE_JS_IDS`
+  ]
     ? ""
-    : "    <!-- Update QUICKBASE_CODEPAGE_JS_IDS in the .env file. -->";
+    : `    <!-- Update ${appIdentifier}_QUICKBASE_CODEPAGE_JS_IDS in the .env file. -->`;
 
   let commentsEnvRename = "";
   if (commentsPageUrl && commentsCssPageIds && commentsJsPageIds) {
@@ -54,7 +86,30 @@ function generateHtml() {
       "    <!-- Make sure to rename the .env.example file to .env -->";
   }
 
-  let htmlContent = `
+  return {
+    commentsPageUrl,
+    commentsCssPageIds,
+    commentsJsPageIds,
+    commentsEnvRename,
+  };
+}
+function generateHtml() {
+  getAppIdentifiers().forEach((appIdentifier) => {
+    const { htmlTitle, cssPageIds, jsPageIds, quickbasePagesUrl } =
+      getEnvironmentVariables(appIdentifier);
+    const { cssLinks, jsScripts } = generateHtmlLinks(
+      cssPageIds,
+      jsPageIds,
+      quickbasePagesUrl || ""
+    );
+    const {
+      commentsPageUrl,
+      commentsCssPageIds,
+      commentsJsPageIds,
+      commentsEnvRename,
+    } = generateEnvironmentComments(appIdentifier);
+
+    let htmlContent = `
 <!doctype html>
 <html lang="en">
 <head>
@@ -62,11 +117,11 @@ function generateHtml() {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>${htmlTitle}</title>`;
 
-  if (commentsEnvRename) htmlContent += `\n${commentsEnvRename}`;
-  if (commentsPageUrl) htmlContent += `\n${commentsPageUrl}`;
-  if (commentsCssPageIds) htmlContent += `\n${commentsCssPageIds}`;
+    if (commentsEnvRename) htmlContent += `\n${commentsEnvRename}`;
+    if (commentsPageUrl) htmlContent += `\n${commentsPageUrl}`;
+    if (commentsCssPageIds) htmlContent += `\n${commentsCssPageIds}`;
 
-  htmlContent += `
+    htmlContent += `
   ${cssLinks}
 </head>
 <body>
@@ -78,26 +133,30 @@ function generateHtml() {
   </noscript>
   <div id="root"></div>`;
 
-  if (commentsPageUrl) htmlContent += `\n${commentsPageUrl}`;
-  if (commentsJsPageIds) htmlContent += `\n${commentsJsPageIds}`;
+    if (commentsPageUrl) htmlContent += `\n${commentsPageUrl}`;
+    if (commentsJsPageIds) htmlContent += `\n${commentsJsPageIds}`;
 
-  htmlContent += `
+    htmlContent += `
   ${jsScripts}
 </body>
 </html>`;
 
-  // Get the root project name
-  findUp(".git", { type: "directory" }).then((gitRootPath) => {
-    const rootFolderName = gitRootPath
-      ? path.basename(path.dirname(gitRootPath))
-      : "codepage"; // if git is not found, use codepage as the default name
+    // Get the root project name
+    findUp(".git", { type: "directory" }).then((gitRootPath) => {
+      const rootFolderName = gitRootPath
+        ? path.basename(path.dirname(gitRootPath))
+        : "codepage"; // if git is not found, use codepage as the default name
 
-    // Writing to file
-    fs.writeFileSync(
-      path.join(process.cwd(), `./dist/${rootFolderName}.html`),
-      htmlContent,
-      "utf8"
-    );
+      // Writing to file
+      fs.writeFileSync(
+        path.join(
+          process.cwd(),
+          `./dist/${appIdentifier}_${rootFolderName}.html`
+        ),
+        htmlContent,
+        "utf8"
+      );
+    });
   });
 }
 
