@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v2.1.0...v2.2.0) (2025-02-21)
+
+
+### Features
+
+* Many app html page gen ([5ef7a89](https://github.com/DrewBradfordXYZ/quickbase-codepages/commit/5ef7a89de11b8d517e6e824879a3f323409f57ff))
+
 ## [2.1.0](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v2.0.0...v2.1.0) (2025-02-21)
 
 feat: If an app has missing env variables, log what is missing and skip app updates
