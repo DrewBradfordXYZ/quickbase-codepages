@@ -2,7 +2,7 @@
 
 ## Description
 
-Automatically update your QuickBase code pages with production files in your `./dist` folder using `npm run codepages`. It also generates an HTML file with JS and CSS code page links using `npm run build`.
+Automatically update your QuickBase code pages in multiple apps with production files in your `./dist` folder using `npm run codepages`. Running `npm run build` generates a QuickBase ready project structure with HTML files for each app that have preassigned links to your code pages.
 
 This allows you to deploy and test your project in QuickBase with ease. Removing the hassle of manually copy and pasting into code pages.
 
@@ -42,9 +42,9 @@ auto updates code page content with production files in your projects `./dist` f
 
 `npm run build`
 
-is extended with additional features to set up a QuickBase ready HTML file and project structure:
+is extended with additional features to set up a QuickBase ready project structure:
 
-- Auto creates a QuickBase ready `yourprojectname.html` file in your project's `./dist` folder with CSS and JS links pointing to your code page URLs.
+- Each app you are updating generates a `APPNAME_yourRootProjectName.html` file in your project's `./dist` folder with generated links to your JS and CSS code pages.
   - To turn this behavior off, remove `&& createCodePageHtml` from the `"build"` script in `package.json`
 - The default `index.html` is no longer needed and is moved into `./dist/unused/`. This folder is ignored by `npm run codepages` and will not be saved to a code page.
   - To turn this behavior off, remove `&& hideDefaultHtml` from the `"build"` script in `package.json`.
