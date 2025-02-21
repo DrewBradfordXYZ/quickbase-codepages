@@ -77,33 +77,33 @@ This project requires environment variables to be set in your `.env` file.
 
 > **Note:** You may rename 'APPNAME1', 'APPNAME2', 'APPNAME3' etc to be your app name. However they cannot be removed or have spaces. The assigned names are displayed in the terminal while updating, so renaming is helpful.
 
-- **`APPNAME1_QUICKBASE_CODEPAGES_URL`**:
+- **`APPNAME_QUICKBASE_CODEPAGES_URL`**:
 
   - Navigate to the Pages section in your app. This is the page that lists all your code pages.
   - Example: `https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/AppDBPages`
 
-- **`APPNAME1_QUICKBASE_CODEPAGE_EDIT_URL`**:
+- **`APPNAME_QUICKBASE_CODEPAGE_EDIT_URL`**:
 
   - The URL when you navigate to an individual code page.
   - Example: `https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/pageedit?pageID=`
 
-- **`APPNAME1_QUICKBASE_HTML_PAGE_TITLE`**:
+- **`APPNAME_QUICKBASE_HTML_PAGE_TITLE`**:
 
   - The HTML `<title></title>` for the generated HTML code page.
   - Example: `Page Title`
 
-- **`APPNAME1_QUICKBASE_CODEPAGE_HTML_ID`**:
+- **`APPNAME_QUICKBASE_CODEPAGE_HTML_ID`**:
 
   - The HTML code page ID.
   - Optional but recommended.
   - Example: `2`
 
-- **`APPNAME1_QUICKBASE_CODEPAGE_JS_IDS`**:
+- **`APPNAME_QUICKBASE_CODEPAGE_JS_IDS`**:
 
   - Comma-separated list of JavaScript code page IDs.
   - Example: `3,5`
 
-- **`APPNAME1_QUICKBASE_CODEPAGE_CSS_IDS`**:
+- **`APPNAME_QUICKBASE_CODEPAGE_CSS_IDS`**:
 
   - Comma-separated list of CSS code page IDs.
   - Example: `4,6`
