@@ -49,7 +49,7 @@ is extended with additional features to set up a QuickBase ready project structu
 - The default `index.html` is no longer needed and is moved into `./dist/unused/`. This folder is ignored by `npm run codepages` and will not be saved to a code page.
   - To turn this behavior off, remove `&& hideDefaultHtml` from the `"build"` script in `package.json`.
 
-> **Note:** To update multiple apps, read the environment variable instructions in this document or in `.env.example`.
+> **Note:** To update multiple apps, see the [environment variable example](https://github.com/DrewBradfordXYZ/quickbase-codepages?tab=readme-ov-file#example-env-file) in this document or read the comments in the `.env.example` file.
 
 ## Required: Environment Variables
 
