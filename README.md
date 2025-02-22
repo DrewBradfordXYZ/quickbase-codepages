@@ -2,7 +2,7 @@
 
 ## Description
 
-Hands free updating of your QuickBase code pages for multiple apps by running `npm run codepages`. Running `npm run build` creates a QuickBase ready HTML file for each app which contain pre-generated links to your code pages.
+Hands free updating of your QuickBase code pages for multiple apps by running `npm run codepages`. Running `npm run build` creates a QuickBase ready HTML file for each app which contains pre-generated links to your code pages.
 
 This allows you to deploy and test your project in QuickBase with ease. Removing the hassle of manually copy and pasting into code pages.
 
@@ -40,6 +40,8 @@ auto updates code page content with production files in your projects `./dist` f
 - To change the matching behavior, reorder the code page ID variable lists in `.env`. NOTE: the order starts top down in `./dist` by file type.
 - If you wish to not update your HTML code page, set `QUICKBASE_CODEPAGE_HTML_ID=` in `.env`.
 
+> **Note:** To update multiple apps, see the [environment variable example](https://github.com/DrewBradfordXYZ/quickbase-codepages?tab=readme-ov-file#example-env-file) in this document or read the comments in the `.env.example` file.
+
 `npm run build`
 
 is extended with additional features to set up a QuickBase ready project structure:
@@ -48,8 +50,6 @@ is extended with additional features to set up a QuickBase ready project structu
   - To turn this behavior off, remove `&& createCodePageHtml` from the `"build"` script in `package.json`
 - The default `index.html` is no longer needed and is moved into `./dist/unused/`. This folder is ignored by `npm run codepages` and will not be saved to a code page.
   - To turn this behavior off, remove `&& hideDefaultHtml` from the `"build"` script in `package.json`.
-
-> **Note:** To update multiple apps, see the [environment variable example](https://github.com/DrewBradfordXYZ/quickbase-codepages?tab=readme-ov-file#example-env-file) in this document or read the comments in the `.env.example` file.
 
 ## Required: Environment Variables
 
