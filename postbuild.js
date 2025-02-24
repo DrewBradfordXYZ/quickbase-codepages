@@ -13,7 +13,3 @@ chmodSync(codePagesUpdatePath, "755");
 chmodSync(htmlGenPath, "755");
 chmodSync(hideDefaultHtmlPath, "755");
 chmodSync(uninstallPath, "755");
-
-console.log(
-  "Permissions set for codePagesUpdate.js, createCodePageHtml.js, hideDefaultHtml.js and uninstall.js"
-);
