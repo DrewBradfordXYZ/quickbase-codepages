@@ -2,7 +2,7 @@
   "name": "quickbase-codepages",
   "version": "2.2.1",
   "description": "Update QuickBase code pages from the command line.",
-  "main": "dist/index.js",
+  "main": "dist/updateCodePages.js",
   "type": "module",
   "bin": {
     "codepages": "./dist/codePagesUpdate.js",
@@ -12,14 +12,12 @@
   },
   "scripts": {
     "build": "tsc",
-    "postbuild": "node postbuild.js",
-    "postinstall": "node postinstall.js",
-    "release": "standard-version",
-    "codepages": "codepages"
+    "postbuild": "node ./postbuild.js",
+    "postinstall": "node ./postinstall.js",
+    "release": "standard-version"
   },
   "dependencies": {
     "chalk": "^5.4.1",
-    "dotenv": "^16.4.7",
     "find-up": "^7.0.0",
     "puppeteer": "^24.2.1"
   },
