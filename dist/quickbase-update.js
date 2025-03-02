@@ -1,4 +1,3 @@
-// src/updateCodePages.ts
 import puppeteer from "puppeteer";
 import * as fs from "fs";
 import * as path from "path";

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { updateCodePages } from "./updateCodePages.js";
+import { updateCodePages } from "./quickbase-update.js";
 import fs from "fs";
 import path from "path";
 const args = process.argv.slice(2);

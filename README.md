@@ -2,11 +2,9 @@
 
 ## Description
 
-Hands free updating of your QuickBase code pages for multiple apps by running `npm run codepages`. Running `npm run build` creates a QuickBase ready HTML file for each app which contains pre-generated links to your code pages.
+Building custom UI's deployed in QuickBase can be challenging. Its important to be able to quickly run tests and deploy to code pages easily in multiple enviornments. Copy and pasting into code pages is time consuming and error prone.
 
-This allows you to deploy and test your project in QuickBase with ease. Removing the hassle of manually copy and pasting into code pages.
-
-This project uses Puppeteer to automate this process.
+This library alleviates this problem by automatically updating code pages in multiple enviornments when you run `npm run codepages`. It also sets up a QuickBase ready project structure with pre-formatted HTML files specifically targetting each enviornment, linking its CSS and JS code pages automatically when you run `npm run dev`.
 
 ![Copy code page in the terminal](copyExample.png)
 
@@ -24,121 +22,130 @@ npm install quickbase-codepages --save-dev
 ## Uninstall
 
 ```bash
-# Uninstall the entire library
 npx uninstall-quickbase-codepages
 ```
-
-It's not recommended to uninstall with `npm uninstall quickbase-codepages --save-dev`. If you did, reinstall the library with `npm install quickbase-codepages --save-dev` and uninstall correctly with `npx uninstall-quickbase-codepages`.
 
 ## Use
 
 `npm run codepages`
 
-auto updates code page content with production files in your projects `./dist` folder.
+Update code pages with files in your `./dist` folder.
 
 - Terminal messages display the matching behavior of code pages to production files so you can see what is being saved.
-- To change the matching behavior, reorder the code page ID variable lists in `.env`. NOTE: the order starts top down in `./dist` by file type.
-- If you wish to not update your HTML code page, set `QUICKBASE_CODEPAGE_HTML_ID=` in `.env`.
 
-> **Note:** To update multiple apps, see the [environment variable example](https://github.com/DrewBradfordXYZ/quickbase-codepages?tab=readme-ov-file#example-env-file) in this document or read the comments in the `.env.example` file.
+> **Note:** To update multiple apps, see the `codepages-config.js` section below.
 
 `npm run build`
 
-is extended with additional features to set up a QuickBase ready project structure:
+Generates a project structure ready for `npm run codepages` so you don't have to think about details.
 
-- Each app you target generates an `APPNAME_yourRootProjectName.html` file in your project's `./dist` folder. Each HTML file contains pre-generated links to your JS and CSS code page URLs.
-  - To turn this behavior off, remove `&& createCodePageHtml` from the `"build"` script in `package.json`
-- The default `index.html` is no longer needed and is moved into `./dist/unused/`. This folder is ignored by `npm run codepages` and will not be saved to a code page.
-  - To turn this behavior off, remove `&& hideDefaultHtml` from the `"build"` script in `package.json`.
+- Generates a set of HTML files for each app you wish to update in your project's ./dist folder.
 
-## Required: Environment Variables
+  - Turn off, remove `&& createCodePageHtml` in package.json.
 
-This project requires environment variables to be set in your `.env` file.
+- Move `index.html` to ./dist/unused/.
 
-#### .gitignore
+  - Turn off, remove `&& hideDefaultHtml` in package.json.
 
-> **Note:** Make sure to add `.env` to your `.gitignore` file to avoid exposing sensitive information.
+## Required: Configuration File
 
-```gitignore
-# Environment variables
-.env
-```
+This project requires a `codepages-config.js` file in your project root to define QuickBase settings.
 
-- **`QUICKBASE_USERNAME`**:
+### Instructions
+
+1. Create `codepages-config.js`:
+
+   - Place this file in your project root.
+   - Define your QuickBase credentials and app configurations.
+
+2. Environment Variables (Optional):
+   - You can manage sensitive data (e.g., login credentials) using environment variables in any way you prefer—via a `.env` file with a library like `dotenv`, your build system, or another method. The `codepages-config.js` file can reference these variables using `process.env` or hardcode values directly, depending on your security needs.
+
+### Configuration Options
+
+- **`username`:**
 
   - Your QuickBase username.
 
-- **`QUICKBASE_PASSWORD`**:
+- **`password`:**
 
   - Your QuickBase password.
 
-- **`QUICKBASE_LOGIN_URL`**:
+- **`quickbaseLoginUrl`:**
 
   - Logout to get the sign-in URL for QuickBase.
   - Example: `https://builderprogram-USERNAME.quickbase.com/db/main?a=SignIn`
 
-> **Note:** You may rename 'APPNAME#' to be your app name. However it cannot be removed or have spaces. The app names are displayed in the terminal while updating, so renaming is helpful.
+#### App Options
 
-- **`APPNAME_QUICKBASE_CODEPAGES_URL`**:
+For each app under `apps` (e.g., MYAPP1, MYAPP2 etc):
+
+- **`quickbaseCodepagesUrl`:**
 
   - Navigate to the Pages section in your app. This is the page that lists all your code pages.
   - Example: `https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/AppDBPages`
 
-- **`APPNAME_QUICKBASE_CODEPAGE_EDIT_URL`**:
+- **`quickbaseCodepageEditUrl`:**
 
   - The URL when you navigate to an individual code page.
   - Example: `https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/pageedit?pageID=`
 
-- **`APPNAME_QUICKBASE_HTML_PAGE_TITLE`**:
+- **`quickbaseHtmlPageTitle`:**
 
   - The HTML `<title></title>` for the generated HTML code page.
   - Example: `Page Title`
 
-- **`APPNAME_QUICKBASE_CODEPAGE_HTML_ID`**:
+- **`quickbaseCodepageHtmlId`:**
 
-  - The HTML code page ID.
-  - Optional but recommended.
+  - The HTML code page ID (optional; set to "" to skip updating).
   - Example: `2`
 
-- **`APPNAME_QUICKBASE_CODEPAGE_JS_IDS`**:
+- **`quickbaseCodepageJsIds`:**
 
-  - Comma-separated list of JavaScript code page IDs.
-  - Example: `3,5`
+  - Array of JavaScript code page IDs (e.g., ["6", "7"]).
 
-- **`APPNAME_QUICKBASE_CODEPAGE_CSS_IDS`**:
+- **`quickbaseCodepageCssIds`:**
 
-  - Comma-separated list of CSS code page IDs.
-  - Example: `4,6`
+  - Array of CSS code page IDs (e.g., ["8"]).
 
-### Example `.env` File
+### Example `codepages-config.js` File
 
-See `.env.example` in the project files. You may use this as a template. Rename `.env.example` to `.env` and place it in your root folder.
+See `codepages-config.js` in the project files. You may use this as a template.
 
-> **Note:** Make sure to add `.env` to your `.gitignore` file to avoid exposing sensitive information.
+> **Note:** You can load environment variables however you prefer (e.g., dotenv, process.env, custom logic).
+> Please take care how you handle sensitive information. Remember to add env variable to your .gitignore. This example is for illustrative purposes only.
 
-```properties
-# QuickBase login
-QUICKBASE_USERNAME=
-QUICKBASE_PASSWORD=
-QUICKBASE_LOGIN_URL=
+```javascript
+// codepages-config.js
 
-# Rename 'APPNAME#' to your app name with no spaces.
-APPNAME1_QUICKBASE_CODEPAGES_URL=
-APPNAME1_QUICKBASE_CODEPAGE_EDIT_URL=
-APPNAME1_QUICKBASE_HTML_PAGE_TITLE=
-APPNAME1_QUICKBASE_CODEPAGE_HTML_ID=
-APPNAME1_QUICKBASE_CODEPAGE_JS_IDS=
-APPNAME1_QUICKBASE_CODEPAGE_CSS_IDS=
-
-# Optionally update as many apps as you want
-APPNAME2_QUICKBASE_CODEPAGES_URL=
-APPNAME2_QUICKBASE_CODEPAGE_EDIT_URL=
-APPNAME2_QUICKBASE_HTML_PAGE_TITLE=
-APPNAME2_QUICKBASE_CODEPAGE_HTML_ID=
-APPNAME2_QUICKBASE_CODEPAGE_JS_IDS=
-APPNAME2_QUICKBASE_CODEPAGE_CSS_IDS=
-
-# Additional apps follow the pattern above...
+export default {
+  // QuickBase login
+  username: EXAMPLE_ENV_QB_USERNAME || "your-username",
+  password: EXAMPLE_ENV_QB_PASSWORD || "your-password",
+  quickbaseLoginUrl: `https://builderprogram-USERNAME.quickbase.com/db/main?a=SignIn`
+  apps: {
+    // Rename 'MYAPP1' to your app name.
+    MYAPP1: {
+      quickbaseCodepagesUrl: "https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/AppDBPages"
+      quickbaseCodepageEditUrl: `https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/pageedit?pageID=`
+      quickbaseHtmlPageTitle: "My App 1",
+      quickbaseCodepageHtmlId: "5",
+      quickbaseCodepageJsIds: ["6", "7"],
+      quickbaseCodepageCssIds: ["8"],
+    },
+    // Additional apps are optional.
+    // Rename 'MYAPP2' to your app name.
+    MYAPP2: {
+      quickbaseCodepagesUrl:"https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/AppDBPages"
+      quickbaseCodepageEditUrl: `https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/pageedit?pageID=`
+      quickbaseHtmlPageTitle: "My App 2",
+      quickbaseCodepageHtmlId: "9",
+      quickbaseCodepageJsIds: ["10", "11"],
+      quickbaseCodepageCssIds: ["12"],
+    },
+    // Adding more apps follow this pattern...
+  },
+};
 ```
 
 ## Contributing

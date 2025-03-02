@@ -1,9 +1,8 @@
-// src/updateCodePages.ts
 import puppeteer, { Page } from "puppeteer";
 import * as fs from "fs";
 import * as path from "path";
 import chalk from "chalk";
-import { AppConfig, AppIdentifierConfig } from "./types.js";
+import { AppConfig, AppIdentifierConfig } from "./types/quickbase-types.js";
 
 export async function updateCodePages(config: AppConfig) {
   const browser = await puppeteer.launch({

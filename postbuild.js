@@ -1,15 +1,18 @@
-import { chmodSync } from "fs";
+// postbuild.js
+import { chmodSync, existsSync, rmSync } from "fs";
 import { resolve } from "path";
 
-// This makees the generated files executable after running 'npm run build'
+const cliQuickbaseUpdatePath = resolve("dist/cli-quickbase-update.js");
+const cliQuickbaseHtmlPath = resolve("dist/cli-quickbase-html.js");
+const cliHideHtmlPath = resolve("dist/cli-hide-html.js");
+const cliUninstallPath = resolve("dist/cli-uninstall.js");
+const typesDir = resolve("dist/types");
 
-const codePagesUpdatePath = resolve("dist/codePagesUpdate.js");
-const htmlGenPath = resolve("dist/createCodePageHtml.js");
-const hideDefaultHtmlPath = resolve("dist/hideDefaultHtml.js");
-const uninstallPath = resolve("dist/uninstall.js");
+chmodSync(cliQuickbaseUpdatePath, "755");
+chmodSync(cliQuickbaseHtmlPath, "755");
+chmodSync(cliHideHtmlPath, "755");
+chmodSync(cliUninstallPath, "755");
 
-// Ensure the files have the correct permissions
-chmodSync(codePagesUpdatePath, "755");
-chmodSync(htmlGenPath, "755");
-chmodSync(hideDefaultHtmlPath, "755");
-chmodSync(uninstallPath, "755");
+if (existsSync(typesDir)) {
+  rmSync(typesDir, { recursive: true }); // Remove the entire types folder
+}

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { updateCodePages } from "./updateCodePages.js";
-import { AppConfig } from "./types.js";
+import { updateCodePages } from "./quickbase-update.js";
+import { AppConfig } from "./types/quickbase-types.js";
 import fs from "fs";
 import path from "path";
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { generateHtml } from "./generateHtml.js";
-import { AppConfig } from "./types.js";
+import { generateQuickbaseHtml } from "./quickbase-html-generate.js";
+import { AppConfig } from "./types/quickbase-types.js";
 import fs from "fs";
 import path from "path";
 
@@ -28,7 +28,7 @@ async function loadConfig() {
 }
 
 loadConfig()
-  .then((config) => generateHtml(config))
+  .then((config) => generateQuickbaseHtml(config))
   .catch((err) => {
     console.error("Failed to load config:", err);
     process.exit(1);
