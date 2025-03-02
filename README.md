@@ -116,12 +116,12 @@ export default {
   // QuickBase login
   username: EXAMPLE_ENV_QB_USERNAME || "your-username",
   password: EXAMPLE_ENV_QB_PASSWORD || "your-password",
-  quickbaseLoginUrl: `https://builderprogram-USERNAME.quickbase.com/db/main?a=SignIn`
+  quickbaseLoginUrl: "https://builderprogram-USERNAME.quickbase.com/db/main?a=SignIn"
   apps: {
     // Rename 'MYAPP1' to your app name.
     MYAPP1: {
       quickbaseCodepagesUrl: "https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/AppDBPages"
-      quickbaseCodepageEditUrl: `https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/pageedit?pageID=`
+      quickbaseCodepageEditUrl: "https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/pageedit?pageID="
       quickbaseHtmlPageTitle: "My App 1",
       quickbaseCodepageHtmlId: "5",
       quickbaseCodepageJsIds: ["6", "7"],
@@ -131,7 +131,7 @@ export default {
     // Rename 'MYAPP2' to your app name.
     MYAPP2: {
       quickbaseCodepagesUrl:"https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/AppDBPages"
-      quickbaseCodepageEditUrl: `https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/pageedit?pageID=`
+      quickbaseCodepageEditUrl: "https://builderprogram-USERNAME.quickbase.com/nav/app/DBID/action/pageedit?pageID="
       quickbaseHtmlPageTitle: "My App 2",
       quickbaseCodepageHtmlId: "9",
       quickbaseCodepageJsIds: ["10", "11"],
