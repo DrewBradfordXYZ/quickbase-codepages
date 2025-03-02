@@ -1,6 +1,6 @@
 {
   "name": "quickbase-codepages",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Update QuickBase code pages from the command line.",
   "main": "dist/updateCodePages.js",
   "type": "module",
