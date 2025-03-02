@@ -41,11 +41,11 @@ Generates a project structure ready for `npm run codepages` so you don't have to
 
 - Generates a set of HTML files for each app you wish to update in your project's ./dist folder.
 
-  - Turn off, remove `&& createCodePageHtml` in package.json.
+  - To turn off, remove `&& createCodePageHtml` in package.json.
 
 - Move `index.html` to ./dist/unused/.
 
-  - Turn off, remove `&& hideDefaultHtml` in package.json.
+  - To turn off, remove `&& hideDefaultHtml` in package.json.
 
 ## Required: Configuration File
 
