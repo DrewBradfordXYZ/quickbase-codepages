@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [3.0.1](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v3.0.0...v3.0.1) (2025-03-02)
 
+App Start Logging: Added console.log(chalk.bold.whiteBright.underline(\nStarting ${appIdentifier})); at the start of each app loop.
+
+HTML Skip Logging: Added a specific warning when htmlPageId is missing or empty: Skipping HTML page update for ${appIdentifier}. Missing HTML page ID.
+
+Screenshot Cleanup: Reintroduced the post-success cleanup of error_codepage_screenshot.png.
+
 ## [3.0.0](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v2.2.1...v3.0.0) (2025-03-02)
 
 Breaking Changes

@@ -1,10 +1,11 @@
+// src/quickbase-update.ts
 import puppeteer, { Page } from "puppeteer";
 import * as fs from "fs";
 import * as path from "path";
 import chalk from "chalk";
 import { AppConfig, AppIdentifierConfig } from "./types/quickbase-types.js";
 
-export async function updateCodePages(config: AppConfig) {
+export async function updateQuickbase(config: AppConfig) {
   const browser = await puppeteer.launch({
     headless: true,
     args: ["--no-sandbox"],
@@ -12,7 +13,7 @@ export async function updateCodePages(config: AppConfig) {
   const page = await browser.newPage();
 
   try {
-    const loginSuccess = await loginToQuickBase(
+    const loginSuccess = await loginToQuickbase(
       page,
       config.quickbaseLoginUrl,
       config.username,
@@ -21,6 +22,10 @@ export async function updateCodePages(config: AppConfig) {
     if (!loginSuccess) return;
 
     for (const [appIdentifier, appConfig] of Object.entries(config.apps)) {
+      console.log(
+        chalk.bold.whiteBright.underline(`\nStarting ${appIdentifier}`)
+      );
+
       const {
         missingEnvVars,
         quickbasePagePath,
@@ -36,9 +41,9 @@ export async function updateCodePages(config: AppConfig) {
         continue;
       }
 
-      const jsFiles = getAllFiles(".js"); // Stays as dist/assets/
-      const cssFiles = getAllFiles(".css"); // Stays as dist/assets/
-      const htmlFiles = getAllFiles(".html", ""); // Stays as dist/
+      const jsFiles = getAllFiles(".js");
+      const cssFiles = getAllFiles(".css");
+      const htmlFiles = getAllFiles(".html", "");
 
       if (htmlPageId && htmlFiles.length > 0) {
         const htmlFilePath = htmlFiles.find((file) =>
@@ -56,6 +61,10 @@ export async function updateCodePages(config: AppConfig) {
         } else {
           console.warn(`No HTML file found for ${appIdentifier} in dist/`);
         }
+      } else if (!htmlPageId) {
+        console.warn(
+          `Skipping HTML page update for ${appIdentifier}. Missing HTML page ID.`
+        );
       }
 
       for (let i = 0; i < jsFiles.length && i < jsPageIds.length; i++) {
@@ -82,6 +91,19 @@ export async function updateCodePages(config: AppConfig) {
         );
       }
     }
+
+    // Screenshot cleanup
+    const screenshotPath = path.join(
+      process.cwd(),
+      "screenshots-puppeteer",
+      "error_codepage_screenshot.png"
+    );
+    if (fs.existsSync(screenshotPath)) {
+      fs.unlinkSync(screenshotPath);
+      console.log(
+        "Script ran without errors, screenshot error file deleted successfully."
+      );
+    }
   } catch (error) {
     console.error("Something went wrong:", error);
     await captureScreenshot(page, "error_codepage_screenshot.png");
@@ -102,21 +124,21 @@ const getAllFiles = (
     console.warn(
       `Could not read directory ${assetsDir}: ${(error as Error).message}`
     );
-    return []; // Gracefully return empty array
+    return [];
   }
   const filteredFiles = files.filter((file) => file.endsWith(extension));
   if (filteredFiles.length === 0) {
     console.warn(
       `No files found in dist/${directory} with extension ${extension}`
     );
-    return []; // Gracefully return empty array
+    return [];
   }
   return filteredFiles.map((file) => path.join(assetsDir, file));
 };
 
 const generateScreenshotPath = (filename: string): string => {
-  const libraryRoot = path.resolve(__dirname, "..");
-  return path.join(libraryRoot, "screenshots-puppeteer", filename);
+  // Use process.cwd() instead of __dirname for ESM compatibility
+  return path.join(process.cwd(), "screenshots-puppeteer", filename);
 };
 
 const captureScreenshot = async (
@@ -151,7 +173,7 @@ const extractPageName = async (page: Page): Promise<string> => {
   });
 };
 
-const loginToQuickBase = async (
+const loginToQuickbase = async (
   page: Page,
   quickbaseUrl: string,
   username: string,
@@ -233,10 +255,11 @@ const updatePageContent = async (
     }
   }
 
-  if (!success)
+  if (!success) {
     throw new Error(
       `Failed to open code-page-${pageId} after ${maxRetries} attempts`
     );
+  }
 
   await page.evaluate((content: string) => {
     const pageText = document.querySelector("#pagetext") as HTMLTextAreaElement;

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { updateCodePages } from "./quickbase-update.js";
+import { updateQuickbase } from "./quickbase-update.js"; // Updated from updateCodePages
 import fs from "fs";
 import path from "path";
 const args = process.argv.slice(2);
@@ -11,34 +11,30 @@ if (!fs.existsSync(configFilePath)) {
     console.error(`Config file not found at ${configFilePath}. Please create a codepages-config.js in your project root or specify a file with --config.`);
     console.error("Example config:");
     console.error(`
-    import dotenv from "dotenv";
-    dotenv.config();
-
     export default {
-      quickbaseLoginUrl: process.env.QUICKBASE_LOGIN_URL,
-      username: process.env.QUICKBASE_USERNAME,
-      password: process.env.QUICKBASE_PASSWORD,
+      quickbaseLoginUrl: "https://yourdomain.quickbase.com/db/main",
+      username: "your-username",
+      password: "your-password",
       apps: {
-        APP1: {
-          quickbaseCodepageEditUrl: process.env.APP1_QUICKBASE_CODEPAGE_EDIT_URL,
-          quickbaseCodepageHtmlId: process.env.APP1_QUICKBASE_CODEPAGE_HTML_ID,
-          quickbaseCodepageJsIds: process.env.APP1_QUICKBASE_CODEPAGE_JS_IDS?.split(",") || [],
-          quickbaseCodepageCssIds: process.env.APP1_QUICKBASE_CODEPAGE_CSS_IDS?.split(",") || [],
-          quickbaseHtmlPageTitle: process.env.APP1_QUICKBASE_HTML_PAGE_TITLE,
-          quickbaseCodepagesUrl: process.env.APP1_QUICKBASE_CODEPAGES_URL
+        MYAPP: {
+          quickbaseCodepageEditUrl: "https://yourdomain.quickbase.com/db/<app-id>?a=editpage&id=",
+          quickbaseCodepageHtmlId: "5",
+          quickbaseCodepageJsIds: ["6", "7"],
+          quickbaseCodepageCssIds: ["8"],
+          quickbaseHtmlPageTitle: "My App",
+          quickbaseCodepagesUrl: "https://yourdomain.quickbase.com/db/<app-id>"
         }
       }
     };
   `);
     process.exit(1);
 }
-// Dynamically import the ES module
 async function loadConfig() {
     const { default: config } = await import(configFilePath);
     return config;
 }
 loadConfig()
-    .then((config) => updateCodePages(config))
+    .then((config) => updateQuickbase(config))
     .catch((err) => {
     console.error("Failed to load config:", err);
     process.exit(1);

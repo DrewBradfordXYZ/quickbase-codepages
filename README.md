@@ -2,9 +2,9 @@
 
 ## Description
 
-Building custom UI's deployed in QuickBase can be challenging. Its important to be able to quickly run tests and deploy to code pages easily in multiple enviornments. Copy and pasting into code pages is time consuming and error prone.
+Building custom UI's hosted on QuickBase can be challenging. Its important to be able to quickly test and deploy code pages easily in multiple enviornments. Copy and pasting into code pages is time consuming and error prone.
 
-This library alleviates this problem by automatically updating code pages in multiple enviornments when you run `npm run codepages`. It also sets up a QuickBase ready project structure with pre-formatted HTML files specifically targetting each enviornment, linking its CSS and JS code pages automatically when you run `npm run dev`.
+This library alleviates this problem by automatically updating code pages in multiple enviornments by typing `npm run codepages` in your terminal. It also sets up a QuickBase ready project structure with pre-formatted HTML files specifically targetting each enviornment, linking its CSS and JS code pages automatically when you `npm run dev`.
 
 ![Copy code page in the terminal](copyExample.png)
 

@@ -1,26 +1,28 @@
+// src/quickbase-update.ts
 import puppeteer from "puppeteer";
 import * as fs from "fs";
 import * as path from "path";
 import chalk from "chalk";
-export async function updateCodePages(config) {
+export async function updateQuickbase(config) {
     const browser = await puppeteer.launch({
         headless: true,
         args: ["--no-sandbox"],
     });
     const page = await browser.newPage();
     try {
-        const loginSuccess = await loginToQuickBase(page, config.quickbaseLoginUrl, config.username, config.password);
+        const loginSuccess = await loginToQuickbase(page, config.quickbaseLoginUrl, config.username, config.password);
         if (!loginSuccess)
             return;
         for (const [appIdentifier, appConfig] of Object.entries(config.apps)) {
+            console.log(chalk.bold.whiteBright.underline(`\nStarting ${appIdentifier}`));
             const { missingEnvVars, quickbasePagePath, htmlPageId, jsPageIds, cssPageIds, } = normalizeAppConfig(appIdentifier, appConfig);
             if (missingEnvVars > 0) {
                 console.warn(`Skipping update for ${appIdentifier} due to missing required variables.`);
                 continue;
             }
-            const jsFiles = getAllFiles(".js"); // Stays as dist/assets/
-            const cssFiles = getAllFiles(".css"); // Stays as dist/assets/
-            const htmlFiles = getAllFiles(".html", ""); // Stays as dist/
+            const jsFiles = getAllFiles(".js");
+            const cssFiles = getAllFiles(".css");
+            const htmlFiles = getAllFiles(".html", "");
             if (htmlPageId && htmlFiles.length > 0) {
                 const htmlFilePath = htmlFiles.find((file) => path.basename(file).startsWith(`${appIdentifier}_`));
                 if (htmlFilePath) {
@@ -30,6 +32,9 @@ export async function updateCodePages(config) {
                 else {
                     console.warn(`No HTML file found for ${appIdentifier} in dist/`);
                 }
+            }
+            else if (!htmlPageId) {
+                console.warn(`Skipping HTML page update for ${appIdentifier}. Missing HTML page ID.`);
             }
             for (let i = 0; i < jsFiles.length && i < jsPageIds.length; i++) {
                 const jsFilePath = jsFiles[i];
@@ -41,6 +46,12 @@ export async function updateCodePages(config) {
                 const cssCodeContent = fs.readFileSync(cssFilePath, "utf8");
                 await updatePageContent(cssPageIds[i], cssCodeContent, cssFilePath, quickbasePagePath, page);
             }
+        }
+        // Screenshot cleanup
+        const screenshotPath = path.join(process.cwd(), "screenshots-puppeteer", "error_codepage_screenshot.png");
+        if (fs.existsSync(screenshotPath)) {
+            fs.unlinkSync(screenshotPath);
+            console.log("Script ran without errors, screenshot error file deleted successfully.");
         }
     }
     catch (error) {
@@ -59,18 +70,18 @@ const getAllFiles = (extension, directory = "assets") => {
     }
     catch (error) {
         console.warn(`Could not read directory ${assetsDir}: ${error.message}`);
-        return []; // Gracefully return empty array
+        return [];
     }
     const filteredFiles = files.filter((file) => file.endsWith(extension));
     if (filteredFiles.length === 0) {
         console.warn(`No files found in dist/${directory} with extension ${extension}`);
-        return []; // Gracefully return empty array
+        return [];
     }
     return filteredFiles.map((file) => path.join(assetsDir, file));
 };
 const generateScreenshotPath = (filename) => {
-    const libraryRoot = path.resolve(__dirname, "..");
-    return path.join(libraryRoot, "screenshots-puppeteer", filename);
+    // Use process.cwd() instead of __dirname for ESM compatibility
+    return path.join(process.cwd(), "screenshots-puppeteer", filename);
 };
 const captureScreenshot = async (page, filename) => {
     const screenshotPath = generateScreenshotPath(filename);
@@ -94,7 +105,7 @@ const extractPageName = async (page) => {
         return nameInput ? nameInput.value : "Unknown";
     });
 };
-const loginToQuickBase = async (page, quickbaseUrl, username, password) => {
+const loginToQuickbase = async (page, quickbaseUrl, username, password) => {
     console.log(chalk.bold.underline.whiteBright("Logging in to QuickBase"));
     let loginSuccess = false;
     const maxLoginAttempts = 3;
@@ -151,8 +162,9 @@ const updatePageContent = async (pageId, codeContent, filePath, quickbasePagePat
             console.error(chalk.yellow(`Attempt ${attempt} to open code-page-${pageId} failed: ${error.message}`));
         }
     }
-    if (!success)
+    if (!success) {
         throw new Error(`Failed to open code-page-${pageId} after ${maxRetries} attempts`);
+    }
     await page.evaluate((content) => {
         const pageText = document.querySelector("#pagetext");
         if (pageText)
