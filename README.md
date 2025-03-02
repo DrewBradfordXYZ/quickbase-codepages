@@ -51,15 +51,10 @@ Generates a project structure ready for `npm run codepages` so you don't have to
 
 This project requires a `codepages-config.js` file in your project root to define QuickBase settings.
 
-### Instructions
+### Create `codepages-config.js`:
 
-1. Create `codepages-config.js`:
-
-   - Place this file in your project root.
-   - Define your QuickBase credentials and app configurations.
-
-2. Environment Variables (Optional):
-   - You can manage sensitive data (e.g., login credentials) using environment variables in any way you prefer—via a `.env` file with a library like `dotenv`, your build system, or another method. The `codepages-config.js` file can reference these variables using `process.env` or hardcode values directly, depending on your security needs.
+- Place this file in your project root.
+- Define your QuickBase credentials and app configurations.
 
 ### Configuration Options
 
@@ -112,8 +107,7 @@ For each app under `apps` (e.g., MYAPP1, MYAPP2 etc):
 
 See `codepages-config.js` in the project files. You may use this as a template.
 
-> **Note:** You can load environment variables however you prefer (e.g., dotenv, process.env, custom logic).
-> Please take care how you handle sensitive information. Remember to add env variable to your .gitignore. This example is for illustrative purposes only.
+> **Note:** You can load environment variables however you prefer (e.g., dotenv, process.env, custom logic). Remember to add sensitive information to your .gitignore. This example is provided as a reference.
 
 ```javascript
 // codepages-config.js

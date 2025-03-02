@@ -4,6 +4,51 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [3.0.0](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v2.2.1...v3.0.0) (2025-03-02)
 
+Breaking Changes
+Configuration Overhaul: Replaced .env file requirement with a new codepages-config.js JavaScript configuration file in the project root. This change removes direct dependency on dotenv and allows flexible configuration management. Users must now define QuickBase credentials and app settings in codepages-config.js instead of .env. See the updated README (#example-codepages-configjs-file) for details.
+
+CLI File Renaming: Renamed CLI entry points for consistency and clarity:
+codePagesUpdate.ts → cli-quickbase-update.ts
+
+createCodePageHtml.ts → cli-quickbase-html.ts
+
+hideDefaultHtml.ts → cli-hide-html.ts
+
+uninstall.ts → cli-uninstall.ts
+
+Updated package.json bin entries accordingly.
+
+Core File Renaming: Renamed core logic files to better reflect QuickBase functionality:
+updateCodePages.ts → quickbase-update.ts
+
+generateHtml.ts → quickbase-html-generate.ts
+
+types.ts → quickbase-types.ts (moved to src/types/).
+
+Build Process: Simplified npm run build to only run tsc, removing vite build (intended for consuming projects). Added postbuild.js cleanup to remove unnecessary dist/types/quickbase-types.js.
+
+Type Handling: Moved quickbase-types.ts to src/types/ and excluded it from dist/ output, as it’s only needed for internal type checking (CLI-only usage).
+
+Added
+Flexible Config: codepages-config.js supports optional environment variable integration (e.g., via dotenv) or hardcoded values, giving users flexibility in managing sensitive data.
+
+HTML Comments and Placeholders: Restored feature from previous versions where missing quickbaseCodepagesUrl, quickbaseCodepageJsIds, or quickbaseCodepageCssIds in codepages-config.js trigger instructional comments and <-...-> placeholders in generated HTML files, aiding user debugging.
+
+README: Completely rewritten to remove .env instructions, focusing on codepages-config.js setup with generic environment variable guidance and URL examples.
+
+Removed
+Direct .env Dependency: No longer requires a .env file or dotenv in the library itself; users can optionally use environment variables in codepages-config.js.
+
+TypeScript Declarations: Stopped generating .d.ts files in dist/, as the library is CLI-only and doesn’t expose a programmatic API.
+
+Notes
+Users upgrading from 2.x.x must:
+Replace their .env file with a codepages-config.js file (see README for examples).
+
+Update package.json scripts if they manually referenced old CLI names (though bin entries ensure compatibility with npm run codepages, etc.).
+
+The dist/types/ folder is no longer generated, keeping the output clean for CLI usage.
+
 ### [2.2.1](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v2.2.0...v2.2.1) (2025-02-24)
 
 Removed console logs for cleaner terminal output
