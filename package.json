@@ -1,14 +1,14 @@
 {
   "name": "quickbase-codepages",
-  "version": "2.2.1",
+  "version": "3.0.0",
   "description": "Update QuickBase code pages from the command line.",
   "main": "dist/updateCodePages.js",
   "type": "module",
   "bin": {
-    "codepages": "./dist/codePagesUpdate.js",
-    "createCodePageHtml": "./dist/createCodePageHtml.js",
-    "hideDefaultHtml": "./dist/hideDefaultHtml.js",
-    "uninstall-quickbase-codepages": "./dist/uninstall.js"
+    "codepages": "./dist/cli-quickbase-update.js",
+    "createCodePageHtml": "./dist/cli-quickbase-html.js",
+    "hideDefaultHtml": "./dist/cli-hide-html.js",
+    "uninstall-quickbase-codepages": "./dist/cli-uninstall.js"
   },
   "scripts": {
     "build": "tsc",

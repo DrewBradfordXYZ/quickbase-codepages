@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v2.2.1...v3.0.0) (2025-03-02)
+
 ### [2.2.1](https://github.com/DrewBradfordXYZ/quickbase-codepages/compare/v2.2.0...v2.2.1) (2025-02-24)
 
 Removed console logs for cleaner terminal output
